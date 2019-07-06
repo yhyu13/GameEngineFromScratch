@@ -1,0 +1,4 @@
+D:/GameEngineFromScratch/build/CMakeFiles/ALL_BUILD.dir
+D:/GameEngineFromScratch/build/CMakeFiles/ZERO_CHECK.dir
+D:/GameEngineFromScratch/build/Framework/Common/CMakeFiles/Common.dir
+D:/GameEngineFromScratch/build/Empty/CMakeFiles/Empty.dir
