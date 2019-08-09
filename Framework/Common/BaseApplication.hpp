@@ -1,9 +1,14 @@
 #pragma once
 #include "IApplication.hpp"
+#include "GfxConfiguration.h"
 
 namespace My {
     class BaseApplication : implements IApplication {
         public:
+            // Disable default constructor
+            BaseApplication() = delete;
+            explicit BaseApplication(GfxConfiguration& cfg);
+            
             virtual int Initialize();
             virtual void Finalize();
             virtual void Tick();
@@ -14,8 +19,8 @@ namespace My {
                 m_bQuit = bQuit;
             }
 
-
-        private:
-            bool m_bQuit;           // Flag to quit the Tick() look
+        protected:
+            static bool m_bQuit;          // Flag to quit the Tick() look
+            GfxConfiguration m_Config;
     };
 }

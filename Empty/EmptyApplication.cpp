@@ -1,7 +1,7 @@
 #include "BaseApplication.hpp"
 
-using namespace My;
 namespace My {
-    BaseApplication App;
-    IApplication* g_App = &App;
+    GfxConfiguration config;
+	BaseApplication g_App(config);
+	IApplication* g_pApp = &g_App;
 }

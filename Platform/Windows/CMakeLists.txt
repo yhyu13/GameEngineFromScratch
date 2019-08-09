@@ -1,0 +1,2 @@
+add_executable(MyGameEngine src/WindowsApplication.cpp)
+target_link_libraries(MyGameEngine Common)
