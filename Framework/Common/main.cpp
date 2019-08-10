@@ -2,10 +2,14 @@
 #include "IApplication.hpp"
 #include "BaseApplication.hpp"
 #include "EngineException.hpp"
+#include "GraphicsManager.hpp"
+#include "MemoryManager.hpp"
 
 using namespace My;
 namespace My {
     extern IApplication* g_pApp;
+    extern MemoryManager*   g_pMemoryManager;
+    extern GraphicsManager* g_pGraphicsManager;
 }
 
 int main() {
@@ -13,18 +17,31 @@ int main() {
     try
 	{
         int ret;
-        if ((ret = g_pApp->Initialize()) != 0) 
-        {
-            printf("App Initialize failed, exit now!");
+        if ((ret = g_pApp->Initialize()) != 0) {
+            printf("App Initialize failed, will exit now.");
+            return ret;
+        }
+
+        if ((ret = g_pMemoryManager->Initialize()) != 0) {
+            printf("Memory Manager Initialize failed, will exit now.");
+            return ret;
+        }
+
+        if ((ret = g_pGraphicsManager->Initialize()) != 0) {
+            printf("Graphics Manager Initialize failed, will exit now.");
             return ret;
         }
 
         try
         {
-            while (!g_pApp->IsQuit()) 
-            {
+            while (!g_pApp->IsQuit()) {
                 g_pApp->Tick();
+                g_pMemoryManager->Tick();
+                g_pGraphicsManager->Tick();
             }
+
+            g_pGraphicsManager->Finalize();
+            g_pMemoryManager->Finalize();
             g_pApp->Finalize();
         }
         catch(const EngineException & e)
@@ -46,7 +63,7 @@ int main() {
         catch( ... )
 		{
             BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp);
-            base->ShowMessage( L"Unhandled Non-STL Exception",L"\n\nException caught at Windows message loop." );
+            base->ShowMessage( L"Unhandled Non-STL Exception",L"Exception caught at Windows message loop." );
 		}
     }
     catch( const EngineException& e )

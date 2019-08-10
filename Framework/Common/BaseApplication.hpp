@@ -13,10 +13,14 @@ namespace My {
             
             explicit BaseApplication(GfxConfiguration& cfg);
             
-            virtual int Initialize();
-            virtual void Finalize();
-            virtual void Tick();
-            virtual bool IsQuit();
+            virtual int Initialize() override;
+            virtual void Finalize() override;
+            virtual void Tick() override;
+            virtual bool IsQuit() override;
+            virtual GfxConfiguration& GetConfiguration() override
+            {
+                return m_Config;
+            }
 
             virtual void ShowMessage( const std::wstring& title,const std::wstring& message ) const;
 

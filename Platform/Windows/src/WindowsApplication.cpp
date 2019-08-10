@@ -1,15 +1,8 @@
 // include the basic windows header file
 #include "WindowsApplication.hpp"
 #include <tchar.h>
-#include <assert.h>
 
 using namespace My;
-
-namespace My {
-    GfxConfiguration config(8, 8, 8, 8, 32, 0, 0, 1920, 720, L"Game Engine From Scratch (Windows)");
-    WindowsApplication  g_App(config);
-    IApplication*       g_pApp = &g_App;
-}
 
 LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
 
@@ -66,7 +59,7 @@ LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
                           NULL,                             // we aren't using menus, NULL
                           hInst,                        // application handle
                           this);                            // Pass "this" to get a return value during creation
-                                                            // Making the last param to be NULL would fail the assertion in _HandleMsgSetup
+                                                            // Making the last param to be NULL would fail the sanity check in _HandleMsgSetup
                                                             // https://docs.microsoft.com/en-us/windows/win32/learnwin32/managing-application-state-
 
      // display the window on the screen
@@ -127,7 +120,8 @@ LRESULT WINAPI My::WindowsApplication::_HandleMsgSetup( HWND hWnd,UINT msg,WPARA
 		const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
 		My::WindowsApplication* const pWnd = reinterpret_cast<My::WindowsApplication*>(pCreate->lpCreateParams);
 		// sanity check
-		assert( pWnd != nullptr );
+		if (pWnd == nullptr)
+            throw Exception(_CRT_WIDE(__FILE__), __LINE__, L"CreateWindowExW failed to create window.");
 		// set WinAPI-managed user data to store ptr to window class
 		SetWindowLongPtr( hWnd,GWLP_USERDATA,reinterpret_cast<LONG_PTR>(pWnd) );
 		// set message proc to normal (non-setup) handler now that setup is finished
@@ -169,6 +163,10 @@ LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPAR
         case WM_DESTROY:
         {
             // close the application entirely
+            // Code is this scope = Kill()
+            // But since MyWindowProc is a static function
+            // A member function call like Kill() is not allowed.
+            // This is the reason the set up _HandleMsgSetup
             Kill();
         } 
         break;
@@ -177,41 +175,3 @@ LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPAR
     // Handle any messages the switch statement didn't
     return DefWindowProc (hWnd, msg, wParam, lParam);
 }
-
-// LRESULT WINAPI My::WindowsApplication::MyWindowProc( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam )
-// {
-
-//     LRESULT result = 0;
-//     bool wasHandled = false;
-//     // sort through and find what code to run for the message given
-//     switch(msg)
-//     {
-// 	    case WM_PAINT:
-//         // we will replace this part with Rendering Module
-// 	    {
-// 	    } 
-//         wasHandled = true;
-//         break;
-
-//          // this message is read when the window is closed
-//         case WM_DESTROY:
-//         {
-//             // close the application entirely
-//             {
-//                 // Code is this scope = Kill()
-//                 // But since MyWindowProc is a static function
-//                 // A member function call like Kill() is not allowed.
-//                 // This is the reason the set up _HandleMsgSetup
-//                 PostQuitMessage( 0 );
-//                 BaseApplication::m_bQuit = true;
-//             }
-//             return 0;
-//         } 
-//         wasHandled = true;
-//         break;
-//     }
-//     // Handle any messages the switch statement didn't
-//     if (!wasHandled) { result = DefWindowProc (hWnd, msg, wParam, lParam); }
-//     return result;
-// }
-
