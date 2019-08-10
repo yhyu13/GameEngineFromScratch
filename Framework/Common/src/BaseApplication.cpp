@@ -18,12 +18,10 @@ int My::BaseApplication::Initialize()
 	return 0;
 }
 
-
 // Finalize all sub modules and clean up all runtime temporary files.
 void My::BaseApplication::Finalize()
 {
 }
-
 
 // One cycle of the main loop
 void My::BaseApplication::Tick()
@@ -33,4 +31,10 @@ void My::BaseApplication::Tick()
 bool My::BaseApplication::IsQuit()
 {
 	return m_bQuit;
+}
+
+void My::BaseApplication::ShowMessage(const std::wstring& title,const std::wstring& message) const
+{
+    std::cerr << title.c_str() << std::endl;
+    std::cerr << message.c_str() << std::endl;
 }

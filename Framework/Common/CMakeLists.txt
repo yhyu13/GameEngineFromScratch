@@ -4,5 +4,6 @@ add_library(
     src/GraphicsManager.cpp
     src/MemoryManager.cpp
     src/Allocator.cpp
+    src/EngineException.cpp
     main.cpp
 )

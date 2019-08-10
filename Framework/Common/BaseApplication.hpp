@@ -7,12 +7,17 @@ namespace My {
         public:
             // Disable default constructor
             BaseApplication() = delete;
+            BaseApplication( const BaseApplication& ) = delete;
+	        BaseApplication& operator=( const BaseApplication& ) = delete;
+            
             explicit BaseApplication(GfxConfiguration& cfg);
             
             virtual int Initialize();
             virtual void Finalize();
             virtual void Tick();
             virtual bool IsQuit();
+
+            virtual void ShowMessage( const std::wstring& title,const std::wstring& message ) const;
 
         protected:
             void SetIsQuit(bool bQuit) {
