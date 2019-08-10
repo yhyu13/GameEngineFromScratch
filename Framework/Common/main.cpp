@@ -31,15 +31,8 @@ int main() {
         {
             const std::wstring eMsg = e.GetFullMessage() + 
 				L"\n\nException caught at Windows message loop.";
-            if(BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp))
-            {
-                base->ShowMessage( e.GetExceptionType(),eMsg );
-            }
-            else
-            {
-                std::cerr << e.GetExceptionType().c_str() << std::endl;
-                std::cerr << eMsg.c_str() << std::endl;
-            }
+            BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp);
+            base->ShowMessage( e.GetExceptionType(),eMsg );
         }
         catch(const std::exception& e)
         {
@@ -47,35 +40,21 @@ int main() {
 			const std::string whatStr( e.what() );
 			const std::wstring eMsg = std::wstring( whatStr.begin(),whatStr.end() ) + 
 				L"\n\nException caught at Windows message loop.";
-            if(BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp))
-            {
-                base->ShowMessage( L"Unhandled STL Exception",eMsg );
-            }
-            else
-            {
-                std::cerr << "Unhandled STL Exception" << std::endl;
-                std::cerr << eMsg.c_str() << std::endl;
-            }
+            BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp);
+            base->ShowMessage( L"Unhandled STL Exception",eMsg );
         }
         catch( ... )
 		{
-			if(BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp))
-            {
-                base->ShowMessage( L"Unhandled Non-STL Exception",L"\n\nException caught at Windows message loop." );
-            }
-            else
-            {
-                std::cerr << "Unhandled Non-STL Exception" << std::endl;
-                std::cerr << "Exception caught at Windows message loop." << std::endl;
-            }
+            BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp);
+            base->ShowMessage( L"Unhandled Non-STL Exception",L"\n\nException caught at Windows message loop." );
 		}
     }
     catch( const EngineException& e )
 	{
 		const std::wstring eMsg = e.GetFullMessage() +
 			L"\n\nException caught at main window creation.";
-        std::cerr << e.GetExceptionType().c_str() << std::endl;
-        std::cerr << eMsg.c_str() << std::endl;
+        std::wcerr << e.GetExceptionType().c_str() << std::endl;
+        std::wcerr << eMsg.c_str() << std::endl;
 	}
 	catch( const std::exception& e )
 	{
@@ -83,13 +62,13 @@ int main() {
 		const std::string whatStr( e.what() );
 		const std::wstring eMsg = std::wstring( whatStr.begin(),whatStr.end() ) +
 			L"\n\nException caught at main window creation.";
-        std::cerr << "Unhandled STL Exception" << std::endl;
-        std::cerr << eMsg.c_str() << std::endl;
+        std::wcerr << "Unhandled STL Exception" << std::endl;
+        std::wcerr << eMsg.c_str() << std::endl;
 	}
 	catch( ... )
 	{
-        std::cerr << "Unhandled Non-STL Exception" << std::endl;
-        std::cerr << "Exception caught at main window creation." << std::endl;
+        std::wcerr << L"Unhandled Non-STL Exception" << std::endl;
+        std::wcerr << L"Exception caught at main window creation." << std::endl;
 	}
 
 	return 0;

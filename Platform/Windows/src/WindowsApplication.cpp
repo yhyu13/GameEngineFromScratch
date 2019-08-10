@@ -106,8 +106,15 @@ bool My::WindowsApplication::IsMinimize() const
 	return IsIconic(hWnd) != 0;
 }
 
-void My::WindowsApplication::ShowMessage( const std::wstring& title,const std::wstring& message ) const noexcept
+void My::WindowsApplication::ShowMessage( const std::wstring& title,const std::wstring& message ) const
 {
+    // Print err message in red
+    HANDLE hConsoleErr = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsoleErr, FOREGROUND_RED);
+    this->My::BaseApplication::ShowMessage(message.c_str(),title.c_str());
+    SetConsoleTextAttribute(hConsoleErr, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+
+    // Show message box
 	MessageBox( hWnd,message.c_str(),title.c_str(),MB_OK );
 }
 
@@ -142,17 +149,20 @@ LRESULT WINAPI My::WindowsApplication::_HandleMsgThunk( HWND hWnd,UINT msg,WPARA
 
 LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam )
 {
-    LRESULT result = 0;
-    bool wasHandled = false;
-
     // sort through and find what code to run for the message given
     switch(msg)
     {
+        case WM_LBUTTONDOWN:
+        {
+            const POINTS pt = MAKEPOINTS( lParam );
+            throw Exception(_CRT_WIDE(__FILE__), __LINE__, L"Test");
+        } 
+        break;
+
 	    case WM_PAINT:
         // we will replace this part with Rendering Module
 	    {
 	    } 
-        wasHandled = true;
         break;
 
          // this message is read when the window is closed
@@ -160,15 +170,12 @@ LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPAR
         {
             // close the application entirely
             Kill();
-            return 0;
         } 
-        wasHandled = true;
         break;
     }
 
     // Handle any messages the switch statement didn't
-    if (!wasHandled) { result = DefWindowProc (hWnd, msg, wParam, lParam); }
-    return result;
+    return DefWindowProc (hWnd, msg, wParam, lParam);
 }
 
 // LRESULT WINAPI My::WindowsApplication::MyWindowProc( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam )

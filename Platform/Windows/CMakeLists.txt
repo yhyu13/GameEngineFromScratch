@@ -1,2 +1,2 @@
-add_executable(MyGameEngine src/WindowsApplication.cpp)
-target_link_libraries(MyGameEngine Common)
+add_executable(GameEngineFromScratch src/WindowsApplication.cpp)
+target_link_libraries(GameEngineFromScratch Common)

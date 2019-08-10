@@ -1,12 +1,10 @@
 
 #define UNICODE 1
-
 #include <windows.h>
 #include <windowsx.h>
 #include "BaseApplication.hpp"
-#include "EngineException.hpp"
 
- namespace My {
+namespace My {
     class WindowsApplication : public BaseApplication
     {
     public:
@@ -28,11 +26,11 @@
             BaseApplication(config) 
         {}
 
-        virtual int Initialize();
-		virtual void Finalize();
+        virtual int Initialize() override;
+		virtual void Finalize() override;
 		// One cycle of the main loop
-		virtual void Tick();
-        virtual void ShowMessage( const std::wstring& title,const std::wstring& message ) const noexcept;
+		virtual void Tick() override;
+        virtual void ShowMessage( const std::wstring& title,const std::wstring& message ) const override;
     
     public:
         bool IsActive() const;

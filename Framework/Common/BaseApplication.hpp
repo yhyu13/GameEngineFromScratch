@@ -1,6 +1,7 @@
 #pragma once
 #include "IApplication.hpp"
 #include "GfxConfiguration.h"
+#include "EngineException.hpp"
 
 namespace My {
     class BaseApplication : implements IApplication {
