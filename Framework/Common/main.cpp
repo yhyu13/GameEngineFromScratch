@@ -26,7 +26,6 @@ int main() {
                 g_pApp->Tick();
             }
             g_pApp->Finalize();
-            return 0;
         }
         catch(const EngineException & e)
         {

@@ -24,10 +24,8 @@ LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
     SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE);
 
     int result;
-
-     result = BaseApplication::Initialize();
-
-     if (result != 0)
+    result = BaseApplication::Initialize();
+    if (result != 0)
         exit(result);
 
      // get the HINSTANCE of the Console Program
@@ -74,7 +72,6 @@ LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
      // display the window on the screen
     ShowWindow(hWnd, SW_SHOWNORMAL);
     UpdateWindow( hWnd );
-
     return result;
 }
 
@@ -88,14 +85,12 @@ LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
 {
     // this struct holds Windows event messages
     MSG msg;
-
-     // we use PeekMessage instead of GetMessage here
+    // we use PeekMessage instead of GetMessage here
     // because we should not block the thread at anywhere
     // except the engine execution driver module 
     if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
         // translate keystroke messages into the right format
         TranslateMessage(&msg);
-
          // send the message to the WindowProc function
         DispatchMessage(&msg); 
     }
@@ -111,7 +106,7 @@ bool My::WindowsApplication::IsMinimize() const
 	return IsIconic(hWnd) != 0;
 }
 
-void My::WindowsApplication::ShowMessage( const std::wstring& title,const std::wstring& message ) const 
+void My::WindowsApplication::ShowMessage( const std::wstring& title,const std::wstring& message ) const noexcept
 {
 	MessageBox( hWnd,message.c_str(),title.c_str(),MB_OK );
 }
@@ -176,42 +171,40 @@ LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPAR
     return result;
 }
 
-LRESULT WINAPI My::WindowsApplication::MyWindowProc( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam )
-{
+// LRESULT WINAPI My::WindowsApplication::MyWindowProc( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam )
+// {
 
-    LRESULT result = 0;
-    bool wasHandled = false;
+//     LRESULT result = 0;
+//     bool wasHandled = false;
+//     // sort through and find what code to run for the message given
+//     switch(msg)
+//     {
+// 	    case WM_PAINT:
+//         // we will replace this part with Rendering Module
+// 	    {
+// 	    } 
+//         wasHandled = true;
+//         break;
 
-    // sort through and find what code to run for the message given
-    switch(msg)
-    {
-	    case WM_PAINT:
-        // we will replace this part with Rendering Module
-	    {
-	    } 
-        wasHandled = true;
-        break;
-
-         // this message is read when the window is closed
-        case WM_DESTROY:
-        {
-            // close the application entirely
-            {
-                // Code is this scope = Kill()
-                // But since MyWindowProc is a static function
-                // A member function call like Kill() is not allowed.
-                // This is the reason the set up _HandleMsgSetup
-                PostQuitMessage( 0 );
-                BaseApplication::m_bQuit = true;
-            }
-            return 0;
-        } 
-        wasHandled = true;
-        break;
-    }
-
-    // Handle any messages the switch statement didn't
-    if (!wasHandled) { result = DefWindowProc (hWnd, msg, wParam, lParam); }
-    return result;
-}
+//          // this message is read when the window is closed
+//         case WM_DESTROY:
+//         {
+//             // close the application entirely
+//             {
+//                 // Code is this scope = Kill()
+//                 // But since MyWindowProc is a static function
+//                 // A member function call like Kill() is not allowed.
+//                 // This is the reason the set up _HandleMsgSetup
+//                 PostQuitMessage( 0 );
+//                 BaseApplication::m_bQuit = true;
+//             }
+//             return 0;
+//         } 
+//         wasHandled = true;
+//         break;
+//     }
+//     // Handle any messages the switch statement didn't
+//     if (!wasHandled) { result = DefWindowProc (hWnd, msg, wParam, lParam); }
+//     return result;
+// }
 

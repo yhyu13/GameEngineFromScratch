@@ -33,6 +33,9 @@ namespace My {
                 static const uint8_t PATTERN_FREE  = 0xFE;
 
                 Allocator();
+                // disable copy & assignment
+                Allocator(const Allocator& clone) = delete;
+                Allocator &operator=(const Allocator &rhs) = delete;
                 explicit Allocator(size_t data_size, size_t page_size, size_t alignment);
                 virtual ~Allocator();
 
@@ -74,9 +77,5 @@ namespace My {
                 uint32_t    m_nPages;
                 uint32_t    m_nBlocks;
                 uint32_t    m_nFreeBlocks;
-
-                // disable copy & assignment
-                Allocator(const Allocator& clone);
-                Allocator &operator=(const Allocator &rhs);
     };
 }

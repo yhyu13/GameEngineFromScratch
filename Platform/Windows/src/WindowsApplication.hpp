@@ -32,12 +32,12 @@
 		virtual void Finalize();
 		// One cycle of the main loop
 		virtual void Tick();
-        virtual void ShowMessage( const std::wstring& title,const std::wstring& message ) const;
+        virtual void ShowMessage( const std::wstring& title,const std::wstring& message ) const noexcept;
     
     public:
         bool IsActive() const;
         bool IsMinimize() const;
-        void Kill()
+        void Kill() noexcept
         {
             PostQuitMessage( 0 );
             BaseApplication::m_bQuit = true;
@@ -50,7 +50,9 @@
         static LRESULT WINAPI _HandleMsgSetup( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam );
         static LRESULT WINAPI _HandleMsgThunk( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam );
         LRESULT HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam );
-        static LRESULT WINAPI MyWindowProc( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam );
+
+        // Deprecated:
+        //static LRESULT WINAPI MyWindowProc( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam );
 
     private:
         static LPCWSTR wndClassName;
