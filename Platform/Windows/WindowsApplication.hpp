@@ -1,4 +1,4 @@
-
+#pragma once
 #define UNICODE 1
 #include <windows.h>
 #include <windowsx.h>
@@ -35,11 +35,6 @@ namespace My {
     public:
         bool IsActive() const;
         bool IsMinimize() const;
-        void Kill() noexcept
-        {
-            PostQuitMessage( 0 );
-            BaseApplication::m_bQuit = true;
-        }
         inline HWND GetMainWindow() { return hWnd; };
 
     protected:
@@ -52,5 +47,11 @@ namespace My {
         static LRESULT WINAPI _HandleMsgThunk( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam );
         LRESULT HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam );
 	    
+        void OnDraw();
+        void Kill() noexcept
+        {
+            PostQuitMessage( 0 );
+            BaseApplication::m_bQuit = true;
+        }
     };
 }

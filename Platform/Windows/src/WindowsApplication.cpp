@@ -156,6 +156,7 @@ LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPAR
 	    case WM_PAINT:
         // we will replace this part with Rendering Module
 	    {
+            OnDraw();
 	    } 
         break;
 
@@ -163,10 +164,12 @@ LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPAR
         case WM_DESTROY:
         {
             // close the application entirely
-            // Code is this scope = Kill()
-            // But since MyWindowProc is a static function
-            // A member function call like Kill() is not allowed.
-            // This is the reason the set up _HandleMsgSetup
+            // Since the function to accept message must be a static function
+            // Calling a member function like Kill() is not allowed.
+            // This is the reason to use _HandleMsgSetup initially and
+            // store the window we created on Win32 side. Then retrive the window
+            // pointer and make HandleMsg member function call in order to make calling
+            // member function possible.
             Kill();
         } 
         break;
@@ -174,4 +177,8 @@ LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPAR
 
     // Handle any messages the switch statement didn't
     return DefWindowProc (hWnd, msg, wParam, lParam);
+}
+
+void My::WindowsApplication::OnDraw()
+{
 }

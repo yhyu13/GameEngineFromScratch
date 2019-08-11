@@ -1,7 +1,8 @@
 #include "GraphicsManager.hpp"
+#include "Mesh.h"
+#include "cbuffer.h"
 
-
- using namespace My;
+using namespace My;
 
  int My::GraphicsManager::Initialize()
 {

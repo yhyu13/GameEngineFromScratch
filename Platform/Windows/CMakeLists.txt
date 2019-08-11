@@ -1,5 +1,5 @@
 add_executable(GameEngineFromScratchD3D12 src/WindowsApplication.cpp src/D3d12Application.cpp)
-target_link_libraries(GameEngineFromScratchD3D12 Common D3dRHI d3d12 dxgi d3dcompiler)
+target_link_libraries(GameEngineFromScratchD3D12 Common GeomMath D3dRHI d3d12 dxgi d3dcompiler)
 
 add_executable(GameEngineFromScratchOpenGL 
     src/WindowsApplication.cpp 

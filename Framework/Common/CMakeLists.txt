@@ -7,3 +7,4 @@ add_library(
     src/MemoryManager.cpp
     main.cpp
 )
+target_link_libraries(Common GeomMath)
