@@ -1,6 +1,4 @@
 # GameEngineFromScratch
 Game Engine From Scratch
 
-```mkdir build; cd build```
-```cmake -G "Unix Makefiles" ..```
-```make```
+```mkdir build; cd build; cmake ..; cmake --build . --config Debug --clean-first; ctest -C Debug-V```
