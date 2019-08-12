@@ -1,4 +1,4 @@
-set(FUNCTIONS CrossProduct DotProduct MulByElement Transpose Normalize
+set(FUNCTIONS Sum CrossProduct DotProduct MulByElement Transpose Normalize
               Transform AddByElement SubByElement
         )
 
