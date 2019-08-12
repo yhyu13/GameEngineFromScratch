@@ -61,6 +61,8 @@ Thumbs.db
 *.app
 
 build*/
+*.vscode
+.vscode
 *.*~
 *.pdb
 *.ilk
