@@ -8,14 +8,12 @@ foreach(FUNC IN LISTS FUNCTIONS)
         MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/${FUNC}.ispc
         COMMENT "Building ${FUNC}"
         )
-
     list(APPEND OBJECTS ${FUNC}.o)
-
 endforeach(FUNC)
 
 add_custom_command(OUTPUT ${GEOMMATH_LIB_FILE}
         COMMAND ${CMAKE_AR} ${ISPC_LIBRARIAN_OPTIONS} ${OBJECTS}
-        COMMAND rm -v ${OBJECTS}
+        # COMMAND rm -v ${OBJECTS}
         DEPENDS ${OBJECTS}
         )
 
