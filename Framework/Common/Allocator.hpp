@@ -1,15 +1,5 @@
-/*
-References:
-
-https://zhuanlan.zhihu.com/p/29023579
-http://allenchou.net/2013/05/memory-management-part-1-of-3-the-allocator/
-
-*/
-
-#pragma once
-
-#include <cstddef>
-#include <cstdint>
+#include <stddef.h>
+#include <stdint.h>
 
 namespace My {
 
@@ -33,11 +23,8 @@ namespace My {
                 static const uint8_t PATTERN_FREE  = 0xFE;
 
                 Allocator();
-                // disable copy & assignment
-                Allocator(const Allocator& clone) = delete;
-                Allocator &operator=(const Allocator &rhs) = delete;
-                explicit Allocator(size_t data_size, size_t page_size, size_t alignment);
-                virtual ~Allocator();
+                Allocator(size_t data_size, size_t page_size, size_t alignment);
+                ~Allocator();
 
                 // resets the allocator to a new configuration
                 void Reset(size_t data_size, size_t page_size, size_t alignment);
@@ -71,11 +58,16 @@ namespace My {
                 size_t      m_szPageSize;
                 size_t      m_szAlignmentSize;
                 size_t      m_szBlockSize;
-                size_t    m_nBlocksPerPage;
+                size_t      m_nBlocksPerPage;
 
                 // statistics
                 uint32_t    m_nPages;
                 uint32_t    m_nBlocks;
                 uint32_t    m_nFreeBlocks;
+
+                // disable copy & assignment
+                Allocator(const Allocator& clone);
+                Allocator &operator=(const Allocator &rhs);
     };
 }
+

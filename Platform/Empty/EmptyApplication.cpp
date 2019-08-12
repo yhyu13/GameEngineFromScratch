@@ -1,3 +1,4 @@
+#pragma once
 #include "BaseApplication.hpp"
 #include "GraphicsManager.hpp"
 #include "MemoryManager.hpp"

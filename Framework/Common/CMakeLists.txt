@@ -1,10 +1,13 @@
 add_library(
-    Common
-    src/Allocator.cpp
-    src/EngineException.cpp
-    src/BaseApplication.cpp
-    src/GraphicsManager.cpp
-    src/MemoryManager.cpp
-    main.cpp
+Common
+EngineException.cpp
+Allocator.cpp
+BaseApplication.cpp
+AssetLoader.cpp
+GraphicsManager.cpp
+MemoryManager.cpp
+main.cpp
 )
 target_link_libraries(Common GeomMath)
+
+add_subdirectory(test)

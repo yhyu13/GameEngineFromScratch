@@ -13,8 +13,8 @@ namespace My {
         {
         public:
             using EngineException::EngineException;
-            virtual std::wstring GetFullMessage() const override { return GetNote() + L"\nAt: " + GetLocation(); }
-            virtual std::wstring GetExceptionType() const override { return L"Windows Exception"; }
+            virtual std::wstring GetFullMessage() const override { return GetNote() + L"\nAt: " + GetLocation(); };
+            virtual std::wstring GetExceptionType() const override { return L"Windows Exception"; };
         };
     public:
         WindowsApplication() = delete;
@@ -47,7 +47,8 @@ namespace My {
         static LRESULT WINAPI _HandleMsgThunk( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam );
         LRESULT HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam );
 	    
-        void OnDraw();
+        virtual void OnDraw() override;
+        
         void Kill() noexcept
         {
             PostQuitMessage( 0 );

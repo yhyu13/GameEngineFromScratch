@@ -1,9 +1,8 @@
 #pragma once
-#include <cstdint>
+#include <stdint.h>
 #include <iostream>
-#include <cwchar>
 
- namespace My {
+namespace My {
 	struct GfxConfiguration {
 		/// Inline all-elements constructor.
 		/// \param[in] r the red color depth in bits
@@ -24,7 +23,7 @@
 			screenWidth(width), screenHeight(height), appName(app_name)
 		{}
 
- 		uint32_t redBits; ///< red color channel depth in bits
+		uint32_t redBits; ///< red color channel depth in bits
 		uint32_t greenBits; ///< green color channel depth in bits
 		uint32_t blueBits; ///< blue color channel depth in bits
 		uint32_t alphaBits; ///< alpha color channel depth in bits
@@ -37,7 +36,7 @@
 
         friend std::wostream& operator<<(std::wostream& out, const GfxConfiguration& conf)
         { 
-            out << "App Name: " << conf.appName << std::endl;
+            out << "App Name:" << conf.appName << std::endl;
             out << "GfxConfiguration:" << 
                 " R:"  << conf.redBits << 
                 " G:"  << conf.greenBits <<
@@ -53,3 +52,4 @@
         }
 	};
 }
+

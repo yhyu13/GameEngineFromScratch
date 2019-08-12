@@ -1,30 +1,32 @@
-IF(${WIN32})
-        SET(GEOMMATH_LIB_FILE ${CMAKE_CURRENT_BINARY_DIR}/GeomMath.lib)
-        SET(ISPC_COMPILER ${PROJECT_SOURCE_DIR}/External/ispc/Release/ispc.exe)
-        SET(ISPC_OPTIONS --arch=x86-64 --target=host)
-        SET(LIBRARIAN_COMMAND lib)
-        SET(LIBRARIAN_OPTIONS /OUT:${GEOMMATH_LIB_FILE})
-ELSE(${WIN32})
-        SET(GEOMMATH_LIB_FILE ${CMAKE_CURRENT_BINARY_DIR}/libGeomMath.a)
-        SET(ISPC_COMPILER ${PROJECT_SOURCE_DIR}/External/ispc/Release/ispc)
-        SET(ISPC_OPTIONS --arch=x86-64 --target=host)
-        SET(LIBRARIAN_COMMAND ar)
-        SET(LIBRARIAN_OPTIONS -cr -o ${GEOMMATH_LIB_FILE})
-ENDIF(${WIN32})
+SET(GEOMMATH_LIB_FILE ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}GeomMath${CMAKE_STATIC_LIBRARY_SUFFIX})
+IF(${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
+    SET(ISPC_COMPILER ispc.exe)
+    SET(ISPC_COMPILER_PATH ${PROJECT_SOURCE_DIR}/External/ispc/Release/)
+    IF(NOT ${CMAKE_CROSSCOMPILING})
+            if(${ARCH_BIT} MATCHES 64)
+            SET(ISPC_OPTIONS --arch=x86-64 --target=host)
+            SET(CMAKE_AR lib)
+            SET(ISPC_LIBRARIAN_OPTIONS /MACHINE:X64 /OUT:${GEOMMATH_LIB_FILE})
+        else()
+            SET(ISPC_OPTIONS --arch=x86 --target=host)
+            SET(CMAKE_AR lib)
+            SET(ISPC_LIBRARIAN_OPTIONS /MACHINE:X86 /OUT:${GEOMMATH_LIB_FILE})
+        endif()
+    ELSE()
+            SET(ISPC_OPTIONS --arch=arm --cpu=cortex-a9 --target=neon-i32x4)
+            SET(CMAKE_AR ${SNC_TOOLCHAIN_DIR}psp2snarl -rcv ${GEOMMATH_LIB_FILE})
+    ENDIF()
+ELSEIF(${CMAKE_HOST_SYSTEM_NAME} MATCHES "Linux")
+    SET(ISPC_COMPILER ispc)
+    SET(ISPC_COMPILER_PATH ${PROJECT_SOURCE_DIR}/External/ispc/)
+    SET(ISPC_OPTIONS --arch=x86-64)
+    SET(ISPC_LIBRARIAN_OPTIONS -rcv -o ${GEOMMATH_LIB_FILE})
+ENDIF()
 
 SET(GEOMMATH_LIB_HEADER_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_custom_command(OUTPUT ${GEOMMATH_LIB_FILE}
-        COMMAND ${ISPC_COMPILER} ${ISPC_OPTIONS} -o CrossProduct.o -I${CMAKE_CURRENT_SOURCE_DIR} -h ${CMAKE_CURRENT_SOURCE_DIR}/include/CrossProduct.h ${CMAKE_CURRENT_SOURCE_DIR}/ispc/CrossProduct.ispc
-        COMMAND ${LIBRARIAN_COMMAND} ${LIBRARIAN_OPTIONS} CrossProduct.o
-        )
-
-add_custom_target(ISPC
-                   DEPENDS ${GEOMMATH_LIB_FILE}
-        )
-
 add_library(GeomMath STATIC IMPORTED GLOBAL)
-add_dependencies(GeomMath ISPC)
+add_dependencies(GeomMath GeomMathLib)
 
 set_target_properties(GeomMath
         PROPERTIES
@@ -32,8 +34,6 @@ set_target_properties(GeomMath
         INTERFACE_INCLUDE_DIRECTORIES ${GEOMMATH_LIB_HEADER_FOLDER}
         )
 
-set_directory_properties(
-        PROPERTIES
-        ADDITIONAL_MAKE_CLEAN_FILES CrossProduct.o
-        )
+add_subdirectory(ispc)
+add_subdirectory(test)
 
