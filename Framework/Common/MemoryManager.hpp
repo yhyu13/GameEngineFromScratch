@@ -22,20 +22,20 @@ namespace My {
         }
 
     public:
-        virtual ~MemoryManager() {}
+        virtual ~MemoryManager() noexcept {};
 
-        virtual int Initialize();
-        virtual void Finalize();
-        virtual void Tick();
+        virtual int Initialize() noexcept;
+        virtual void Finalize() noexcept;
+        virtual void Tick() noexcept;
 
-        void* Allocate(size_t size);
-        void* Allocate(size_t size, size_t alignment);
-        void  Free(void* p, size_t size);
+        void* Allocate(size_t size) noexcept;
+        void* Allocate(size_t size, size_t alignment) noexcept;
+        void  Free(void* p, size_t size) noexcept;
     private:
         static size_t*        m_pBlockSizeLookup;
         static Allocator*     m_pAllocators;
     private:
-        static Allocator* LookUpAllocator(size_t size);
+        static inline Allocator* LookUpAllocator(size_t size) noexcept;
     };
 }
 

@@ -37,8 +37,7 @@ int main(int , char** )
     timer.Reset();
     for (int i = 0; i < 10000; i++)
     {
-        char* space = (char*)g_pMemoryManager->Allocate(1024);
-        *space = '\0';
+        char* space = (char*)g_pMemoryManager->Allocate(512);
         g_pMemoryManager->Delete(space);
     }
     wcout << L"MyMemoryManager Score (1kb): " << wStr(timer.Mark()) << endl;
@@ -46,8 +45,7 @@ int main(int , char** )
     timer.Reset();
     for (int i = 0; i < 10000; i++)
     {
-        char* space = (char*)malloc(1024);
-        *space = '\0';
+        char* space = (char*)malloc(512);
         free(space);
     }
     wcout << L"C++NativeMalloc Score (1kb): " << wStr(timer.Mark()) << endl;

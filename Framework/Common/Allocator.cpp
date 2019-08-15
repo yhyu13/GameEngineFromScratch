@@ -9,30 +9,30 @@
 
 using namespace My;
 
-My::Allocator::Allocator()
+My::Allocator::Allocator() noexcept
         : m_pPageList(nullptr), m_pFreeList(nullptr), 
         m_szDataSize(0), m_szPageSize(0), 
         m_szAlignmentSize(0), m_szBlockSize(0), m_nBlocksPerPage(0) 
 {
 }
 
-My::Allocator::Allocator(size_t data_size, size_t page_size, size_t alignment)
+My::Allocator::Allocator(size_t data_size, size_t page_size, size_t alignment) noexcept
         : m_pPageList(nullptr), m_pFreeList(nullptr)
 {
     Reset(data_size, page_size, alignment);
 }
 
-My::Allocator::~Allocator()
+My::Allocator::~Allocator() noexcept
 {
     FreeAll();
 }
 
-void My::Allocator::Reset(size_t data_size, size_t page_size, size_t alignment)
+void My::Allocator::Reset(size_t data_size, size_t page_size, size_t alignment) noexcept
 {
     FreeAll();
 
     m_szDataSize = data_size;
-    m_szPageSize = page_size;
+    m_szPageSize = page_size + sizeof(PageHeader);
 
     size_t minimal_size = (sizeof(BlockHeader) > m_szDataSize) ? sizeof(BlockHeader) : m_szDataSize;
     // this magic only works when alignment is 2^n, which should general be the case
@@ -48,7 +48,7 @@ void My::Allocator::Reset(size_t data_size, size_t page_size, size_t alignment)
     m_nBlocksPerPage = (m_szPageSize - sizeof(PageHeader)) / m_szBlockSize;
 }
 
-void* My::Allocator::Allocate()
+void* My::Allocator::Allocate() noexcept
 {
     if (!m_pFreeList) {
         // allocate a new page
@@ -89,7 +89,7 @@ void* My::Allocator::Allocate()
     return reinterpret_cast<void*>(freeBlock);
 }
 
-void My::Allocator::Free(void* p)
+void My::Allocator::Free(void* p) noexcept
 {
     BlockHeader* block = reinterpret_cast<BlockHeader*>(p);
 
@@ -102,7 +102,7 @@ void My::Allocator::Free(void* p)
     ++m_nFreeBlocks;
 }
 
-void My::Allocator::FreeAll()
+void My::Allocator::FreeAll() noexcept
 {
     PageHeader* pPage = m_pPageList;
     while(pPage) {
@@ -121,7 +121,7 @@ void My::Allocator::FreeAll()
 }
 
 #if defined(_DEBUG)
-void My::Allocator::FillFreePage(PageHeader *pPage)
+void My::Allocator::FillFreePage(PageHeader *pPage) noexcept
 {
     // page header
     pPage->pNext = nullptr;
@@ -135,7 +135,7 @@ void My::Allocator::FillFreePage(PageHeader *pPage)
     }
 }
  
-void My::Allocator::FillFreeBlock(BlockHeader *pBlock)
+void My::Allocator::FillFreeBlock(BlockHeader *pBlock) noexcept
 {
     // block header + data
     memset(pBlock, PATTERN_FREE, m_szBlockSize - m_szAlignmentSize);
@@ -145,7 +145,7 @@ void My::Allocator::FillFreeBlock(BlockHeader *pBlock)
                 PATTERN_ALIGN, m_szAlignmentSize);
 }
  
-void My::Allocator::FillAllocatedBlock(BlockHeader *pBlock)
+void My::Allocator::FillAllocatedBlock(BlockHeader *pBlock) noexcept
 {
     // block header + data
     memset(pBlock, PATTERN_ALLOC, m_szBlockSize - m_szAlignmentSize);
@@ -157,7 +157,7 @@ void My::Allocator::FillAllocatedBlock(BlockHeader *pBlock)
  
 #endif
 
-My::BlockHeader* My::Allocator::NextBlock(BlockHeader *pBlock)
+My::BlockHeader* My::Allocator::NextBlock(BlockHeader *pBlock) noexcept
 {
     return reinterpret_cast<BlockHeader *>(reinterpret_cast<uint8_t*>(pBlock) + m_szBlockSize);
 }

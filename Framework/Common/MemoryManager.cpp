@@ -38,7 +38,7 @@ namespace My {
     Allocator*     MemoryManager::m_pAllocators;
 }
 
-int My::MemoryManager::Initialize()
+int My::MemoryManager::Initialize() noexcept
 {
     // one-time initialization
     static bool s_bInitialized = false;
@@ -55,6 +55,7 @@ int My::MemoryManager::Initialize()
         m_pAllocators = new Allocator[kNumBlockSizes];
         for (size_t i = 0; i < kNumBlockSizes; i++) {
             m_pAllocators[i].Reset(kBlockSizes[i], kPageSize, kAlignment);
+            m_pAllocators[i].Allocate();
         }
 
         s_bInitialized = true;
@@ -63,40 +64,35 @@ int My::MemoryManager::Initialize()
     return 0;
 }
 
-void My::MemoryManager::Finalize()
+void My::MemoryManager::Finalize() noexcept
 {
     delete[] m_pAllocators;
     delete[] m_pBlockSizeLookup;
 }
 
-void My::MemoryManager::Tick()
+void My::MemoryManager::Tick() noexcept
 {
 }
 
-Allocator* My::MemoryManager::LookUpAllocator(size_t size)
+Allocator* My::MemoryManager::LookUpAllocator(size_t size) noexcept
 {
     // check eligibility for lookup
-    if (size <= kMaxBlockSize)
-        return m_pAllocators + m_pBlockSizeLookup[size];
-    else
-        return nullptr;
+    return (size <= kMaxBlockSize) ? m_pAllocators + m_pBlockSizeLookup[size] : nullptr;
 }
 
-void* My::MemoryManager::Allocate(size_t size)
+void* My::MemoryManager::Allocate(size_t size) noexcept
 {
-    Allocator* pAlloc = LookUpAllocator(size);
-    if (pAlloc)
-        return pAlloc->Allocate();
+    if (Allocator* pAlloc = LookUpAllocator(size))
+         pAlloc->Allocate();
     else
         return malloc(size);
 }
 
-void* My::MemoryManager::Allocate(size_t size, size_t alignment)
+void* My::MemoryManager::Allocate(size_t size, size_t alignment) noexcept
 {
     uint8_t* p;
     size += alignment;
-    Allocator* pAlloc = LookUpAllocator(size);
-    if (pAlloc)
+    if (Allocator* pAlloc = LookUpAllocator(size))
         p = reinterpret_cast<uint8_t*>(pAlloc->Allocate());
     else
         p = reinterpret_cast<uint8_t*>(malloc(size));
@@ -106,10 +102,9 @@ void* My::MemoryManager::Allocate(size_t size, size_t alignment)
     return static_cast<void*>(p);
 }
 
-void My::MemoryManager::Free(void* p, size_t size)
+void My::MemoryManager::Free(void* p, size_t size) noexcept
 {
-    Allocator* pAlloc = LookUpAllocator(size);
-    if (pAlloc)
+    if (Allocator* pAlloc = LookUpAllocator(size))
         pAlloc->Free(p);
     else
         free(p);

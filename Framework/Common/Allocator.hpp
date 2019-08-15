@@ -22,35 +22,35 @@ namespace My {
                 static const uint8_t PATTERN_ALLOC = 0xFD;
                 static const uint8_t PATTERN_FREE  = 0xFE;
 
-                Allocator();
-                Allocator(size_t data_size, size_t page_size, size_t alignment);
-                ~Allocator();
+                Allocator() noexcept;
+                Allocator(size_t data_size, size_t page_size, size_t alignment) noexcept;
+                ~Allocator() noexcept;
 
                 // disable copy & assignment
                 Allocator(const Allocator& clone) = delete;
                 Allocator &operator=(const Allocator &rhs) = delete;
 
                 // resets the allocator to a new configuration
-                void Reset(size_t data_size, size_t page_size, size_t alignment);
+                void Reset(size_t data_size, size_t page_size, size_t alignment) noexcept;
 
                 // alloc and free blocks
-                void* Allocate();
-                void  Free(void* p);
-                void  FreeAll();
+                void* Allocate() noexcept;
+                void  Free(void* p) noexcept;
+                void  FreeAll() noexcept;
         private:
 #if defined(_DEBUG)
                 // fill a free page with debug patterns
-                void FillFreePage(PageHeader* pPage);
+                void FillFreePage(PageHeader* pPage) noexcept;
 
                 // fill a block with debug patterns
-                void FillFreeBlock(BlockHeader* pBlock);
+                void FillFreeBlock(BlockHeader* pBlock) noexcept;
 
                 // fill an allocated block with debug patterns
-                void FillAllocatedBlock(BlockHeader* pBlock);
+                void FillAllocatedBlock(BlockHeader* pBlock) noexcept;
 #endif
 
                 // gets the next block
-                BlockHeader* NextBlock(BlockHeader* pBlock);
+                BlockHeader* NextBlock(BlockHeader* pBlock) noexcept;
 
                 // the page list
                 PageHeader* m_pPageList;
