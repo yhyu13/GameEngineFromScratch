@@ -8,6 +8,6 @@ GraphicsManager.cpp
 MemoryManager.cpp
 main.cpp
 )
-target_link_libraries(Common GeomMath)
+target_link_libraries(Common GeomMath Utility)
 
 add_subdirectory(test)

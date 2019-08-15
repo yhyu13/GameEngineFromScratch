@@ -26,6 +26,10 @@ namespace My {
                 Allocator(size_t data_size, size_t page_size, size_t alignment);
                 ~Allocator();
 
+                // disable copy & assignment
+                Allocator(const Allocator& clone) = delete;
+                Allocator &operator=(const Allocator &rhs) = delete;
+
                 // resets the allocator to a new configuration
                 void Reset(size_t data_size, size_t page_size, size_t alignment);
 
@@ -64,10 +68,6 @@ namespace My {
                 uint32_t    m_nPages;
                 uint32_t    m_nBlocks;
                 uint32_t    m_nFreeBlocks;
-
-                // disable copy & assignment
-                Allocator(const Allocator& clone);
-                Allocator &operator=(const Allocator &rhs);
     };
 }
 
