@@ -83,7 +83,7 @@ void* My::Allocator::Allocate() noexcept
     --m_nFreeBlocks;
 
 #if defined(_DEBUG)
-    FillAllocatedBlock(freeBlock);
+    //FillAllocatedBlock(freeBlock);
 #endif
 
     return reinterpret_cast<void*>(freeBlock);
@@ -94,7 +94,7 @@ void My::Allocator::Free(void* p) noexcept
     BlockHeader* block = reinterpret_cast<BlockHeader*>(p);
 
 #if defined(_DEBUG)
-    FillFreeBlock(block);
+    //FillFreeBlock(block);
 #endif
 
     block->pNext = m_pFreeList;

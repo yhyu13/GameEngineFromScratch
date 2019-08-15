@@ -82,10 +82,12 @@ Allocator* My::MemoryManager::LookUpAllocator(size_t size) noexcept
 
 void* My::MemoryManager::Allocate(size_t size) noexcept
 {
-    if (Allocator* pAlloc = LookUpAllocator(size))
-         pAlloc->Allocate();
-    else
-        return malloc(size);
+    return (size <= kMaxBlockSize) ? (m_pAllocators + m_pBlockSizeLookup[size])->Allocate() 
+        : malloc(size);
+    // if (Allocator* pAlloc = LookUpAllocator(size))
+    //     pAlloc->Allocate();
+    // else
+    //     return malloc(size);
 }
 
 void* My::MemoryManager::Allocate(size_t size, size_t alignment) noexcept
@@ -104,9 +106,11 @@ void* My::MemoryManager::Allocate(size_t size, size_t alignment) noexcept
 
 void My::MemoryManager::Free(void* p, size_t size) noexcept
 {
-    if (Allocator* pAlloc = LookUpAllocator(size))
-        pAlloc->Free(p);
-    else
-        free(p);
+    (size <= kMaxBlockSize) ? (m_pAllocators + m_pBlockSizeLookup[size])->Free(p) 
+        : free(p);
+    // if (Allocator* pAlloc = LookUpAllocator(size))
+    //     pAlloc->Free(p);
+    // else
+    //     free(p);
 }
 
