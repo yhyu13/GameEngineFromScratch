@@ -9,11 +9,10 @@ namespace My {
     {
     public:
         // Custom exception class for windows application
-        class Exception : public EngineException
+        class WindowsException : public EngineException
         {
         public:
             using EngineException::EngineException;
-            virtual std::wstring GetFullMessage() const override { return GetNote() + L"\nAt: " + GetLocation(); };
             virtual std::wstring GetExceptionType() const override { return L"Windows Exception"; };
         };
     public:
@@ -35,7 +34,7 @@ namespace My {
     public:
         bool IsActive() const;
         bool IsMinimize() const;
-        inline HWND GetMainWindow() { return hWnd; };
+        HWND GetMainWindow() { return hWnd; };
 
     protected:
         HWND hWnd = nullptr;

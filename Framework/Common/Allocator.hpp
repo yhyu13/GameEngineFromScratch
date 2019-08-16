@@ -23,7 +23,7 @@ namespace My {
                 static const uint8_t PATTERN_FREE  = 0xFE;
 
                 Allocator() noexcept;
-                Allocator(size_t data_size, size_t page_size, size_t alignment) noexcept;
+                explicit Allocator(size_t data_size, size_t page_size, size_t alignment) noexcept;
                 ~Allocator() noexcept;
 
                 // disable copy & assignment
@@ -34,7 +34,7 @@ namespace My {
                 void Reset(size_t data_size, size_t page_size, size_t alignment) noexcept;
 
                 // alloc and free blocks
-                void* Allocate() noexcept;
+                void* Allocate(size_t size = 0) noexcept;
                 void  Free(void* p) noexcept;
                 void  FreeAll() noexcept;
         private:

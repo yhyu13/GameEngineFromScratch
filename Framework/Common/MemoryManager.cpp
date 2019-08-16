@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "MemoryManager.hpp"
 
 extern "C" void* malloc(size_t size);
@@ -50,14 +51,15 @@ int My::MemoryManager::Initialize() noexcept
             if (i > kBlockSizes[j]) ++j;
             m_pBlockSizeLookup[i] = j;
         }
+        if (j != kNumBlockSizes-1)
+            throw 42;
 
         // initialize the allocators
         m_pAllocators = new Allocator[kNumBlockSizes];
         for (size_t i = 0; i < kNumBlockSizes; i++) {
             m_pAllocators[i].Reset(kBlockSizes[i], kPageSize, kAlignment);
-            m_pAllocators[i].Allocate();
+            m_pAllocators[i].Allocate(0);
         }
-
         s_bInitialized = true;
     }
 
@@ -84,10 +86,6 @@ void* My::MemoryManager::Allocate(size_t size) noexcept
 {
     return (size <= kMaxBlockSize) ? (m_pAllocators + m_pBlockSizeLookup[size])->Allocate() 
         : malloc(size);
-    // if (Allocator* pAlloc = LookUpAllocator(size))
-    //     pAlloc->Allocate();
-    // else
-    //     return malloc(size);
 }
 
 void* My::MemoryManager::Allocate(size_t size, size_t alignment) noexcept
@@ -108,9 +106,5 @@ void My::MemoryManager::Free(void* p, size_t size) noexcept
 {
     (size <= kMaxBlockSize) ? (m_pAllocators + m_pBlockSizeLookup[size])->Free(p) 
         : free(p);
-    // if (Allocator* pAlloc = LookUpAllocator(size))
-    //     pAlloc->Free(p);
-    // else
-    //     free(p);
 }
 

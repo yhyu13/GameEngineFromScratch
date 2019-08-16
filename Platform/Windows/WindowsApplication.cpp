@@ -120,7 +120,7 @@ LRESULT WINAPI My::WindowsApplication::_HandleMsgSetup( HWND hWnd,UINT msg,WPARA
 		My::WindowsApplication* const pWnd = reinterpret_cast<My::WindowsApplication*>(pCreate->lpCreateParams);
 		// sanity check
 		if (pWnd == nullptr)
-            throw Exception(_CRT_WIDE(__FILE__), __LINE__, L"CreateWindowExW failed to create window.");
+            throw WindowsException(_CRT_WIDE(__FILE__), __LINE__, L"CreateWindowExW failed to create window.");
 		// set WinAPI-managed user data to store ptr to window class
 		SetWindowLongPtr( hWnd,GWLP_USERDATA,reinterpret_cast<LONG_PTR>(pWnd) );
 		// set message proc to normal (non-setup) handler now that setup is finished
@@ -148,7 +148,7 @@ LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPAR
         case WM_LBUTTONDOWN:
         {
             const POINTS pt = MAKEPOINTS( lParam );
-            throw Exception(_CRT_WIDE(__FILE__), __LINE__, L"Test");
+            throw WindowsException(_CRT_WIDE(__FILE__), __LINE__, L"Test");
         } 
         break;
 

@@ -17,8 +17,8 @@ namespace My
 		const std::wstring& GetFile() const;
 		unsigned int GetLine() const;
 		std::wstring GetLocation() const;
-		virtual std::wstring GetFullMessage() const = 0;
-		virtual std::wstring GetExceptionType() const = 0;
+		virtual std::wstring GetFullMessage() const;
+		virtual std::wstring GetExceptionType() const;
 	private:
 		std::wstring note;
 		std::wstring file;

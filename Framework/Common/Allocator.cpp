@@ -48,7 +48,7 @@ void My::Allocator::Reset(size_t data_size, size_t page_size, size_t alignment) 
     m_nBlocksPerPage = (m_szPageSize - sizeof(PageHeader)) / m_szBlockSize;
 }
 
-void* My::Allocator::Allocate() noexcept
+void* My::Allocator::Allocate(size_t size) noexcept
 {
     if (!m_pFreeList) {
         // allocate a new page
@@ -83,7 +83,7 @@ void* My::Allocator::Allocate() noexcept
     --m_nFreeBlocks;
 
 #if defined(_DEBUG)
-    //FillAllocatedBlock(freeBlock);
+    FillAllocatedBlock(freeBlock);
 #endif
 
     return reinterpret_cast<void*>(freeBlock);
@@ -91,10 +91,11 @@ void* My::Allocator::Allocate() noexcept
 
 void My::Allocator::Free(void* p) noexcept
 {
+
     BlockHeader* block = reinterpret_cast<BlockHeader*>(p);
 
 #if defined(_DEBUG)
-    //FillFreeBlock(block);
+    FillFreeBlock(block);
 #endif
 
     block->pNext = m_pFreeList;

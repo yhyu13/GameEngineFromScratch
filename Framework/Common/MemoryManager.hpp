@@ -24,9 +24,9 @@ namespace My {
     public:
         virtual ~MemoryManager() noexcept {};
 
-        virtual int Initialize() noexcept;
-        virtual void Finalize() noexcept;
-        virtual void Tick() noexcept;
+        virtual int Initialize() noexcept override;
+        virtual void Finalize() noexcept override;
+        virtual void Tick() noexcept override;
 
         void* Allocate(size_t size) noexcept;
         void* Allocate(size_t size, size_t alignment) noexcept;
@@ -35,7 +35,7 @@ namespace My {
         static size_t*        m_pBlockSizeLookup;
         static Allocator*     m_pAllocators;
     private:
-        static inline Allocator* LookUpAllocator(size_t size) noexcept;
+        static Allocator* LookUpAllocator(size_t size) noexcept;
     };
 }
 

@@ -53,6 +53,22 @@ int main(int , char** )
     timer.Reset();
     for (int i = 0; i < 10000; i++)
     {
+        char* space = (char*)g_pMemoryManager->Allocate(4096);
+        g_pMemoryManager->Delete(space);
+    }
+    wcout << L"MyMemoryManager Score (4kb): " << wStr(timer.Mark()) << endl;
+
+    timer.Reset();
+    for (int i = 0; i < 10000; i++)
+    {
+        char* space = (char*)malloc(4096);
+        free(space);
+    }
+    wcout << L"C++NativeMalloc Score (4kb): " << wStr(timer.Mark()) << endl;
+
+    timer.Reset();
+    for (int i = 0; i < 10000; i++)
+    {
         Vector4f* vec = g_pMemoryManager->New<Vector4f>();
         g_pMemoryManager->Delete(vec);
     }
