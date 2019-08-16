@@ -25,9 +25,9 @@ namespace My {
     public:
         using WindowsApplication::WindowsApplication;
 
-        virtual int Initialize() override;
+        virtual int Initialize();
 
-        virtual void OnDraw() override;
+        virtual void OnDraw();
 
     private:
         Image m_Image[2];
@@ -39,25 +39,26 @@ namespace My {
 	IApplication* g_pApp                = static_cast<IApplication*>(new TestApplication(config));
     GraphicsManager* g_pGraphicsManager = static_cast<GraphicsManager*>(new TestGraphicsManager);
     MemoryManager*   g_pMemoryManager   = static_cast<MemoryManager*>(new MemoryManager);
+
 }
 
 int My::TestApplication::Initialize()
 {
-    int result = 0;
+    int result;
 
     result = WindowsApplication::Initialize();
 
-    if (result != 0)
-        exit(result);
+    if (result == 0) {
+        AssetLoader asset_loader;
+        BmpParser   parser;
+        Buffer buf = asset_loader.SyncOpenAndReadBinary("Textures/icelogo-color.bmp");
 
-    AssetLoader asset_loader;
-    BmpParser   parser;
-    Buffer buf = asset_loader.SyncOpenAndReadBinary("Textures/icelogo-color.bmp");
-    m_Image[0] = parser.Parse(buf);
+        m_Image[0] = parser.Parse(buf);
 
-    buf = asset_loader.SyncOpenAndReadBinary("Textures/icelogo-normal.bmp");
+        buf = asset_loader.SyncOpenAndReadBinary("Textures/icelogo-normal.bmp");
 
-    m_Image[1] = parser.Parse(buf);
+        m_Image[1] = parser.Parse(buf);
+    }
 
     return result;
 }
@@ -110,3 +111,5 @@ void My::TestGraphicsManager::DrawBitmap(const Image* image, int32_t index)
     // end GPU draw command building
     m_pRenderTarget->EndDraw();
 }
+
+

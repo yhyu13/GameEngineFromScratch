@@ -38,7 +38,7 @@ int main(int , char** )
     for (int i = 0; i < 10000; i++)
     {
         char* space = (char*)g_pMemoryManager->Allocate(1024);
-        g_pMemoryManager->Delete(space);
+        g_pMemoryManager->Free(space, 1024);
     }
     wcout << L"MyMemoryManager Score (1kb): " << wStr(timer.Mark()) << endl;
 
@@ -54,7 +54,7 @@ int main(int , char** )
     for (int i = 0; i < 10000; i++)
     {
         char* space = (char*)g_pMemoryManager->Allocate(4096);
-        g_pMemoryManager->Delete(space);
+        g_pMemoryManager->Free(space, 4096);
     }
     wcout << L"MyMemoryManager Score (4kb): " << wStr(timer.Mark()) << endl;
 

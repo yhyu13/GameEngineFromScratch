@@ -48,7 +48,7 @@ void My::Allocator::Reset(size_t data_size, size_t page_size, size_t alignment) 
     m_nBlocksPerPage = (m_szPageSize - sizeof(PageHeader)) / m_szBlockSize;
 }
 
-void* My::Allocator::Allocate(size_t size) noexcept
+void* My::Allocator::Allocate() noexcept
 {
     if (!m_pFreeList) {
         // allocate a new page

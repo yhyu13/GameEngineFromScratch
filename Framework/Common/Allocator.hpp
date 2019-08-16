@@ -34,7 +34,7 @@ namespace My {
                 void Reset(size_t data_size, size_t page_size, size_t alignment) noexcept;
 
                 // alloc and free blocks
-                void* Allocate(size_t size = 0) noexcept;
+                void* Allocate() noexcept;
                 void  Free(void* p) noexcept;
                 void  FreeAll() noexcept;
         private:

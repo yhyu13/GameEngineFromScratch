@@ -8,14 +8,16 @@ namespace My {
     class MemoryManager : implements IRuntimeModule
     {
     public:
+        // Replacement for new 
         template<class T, typename... Arguments>
-        T* New(Arguments... parameters)
+        T* New(Arguments... parameters) noexcept
         {
             return new (Allocate(sizeof(T))) T(parameters...);
         }
 
+        // Replacement for delete
         template<class T>
-        void Delete(T* p)
+        void Delete(T* p) noexcept
         {
             p->~T();
             Free(p, sizeof(T));
@@ -28,10 +30,34 @@ namespace My {
         virtual void Finalize() noexcept override;
         virtual void Tick() noexcept override;
 
-        void* Allocate(size_t size) noexcept;
+        // Called in Buffer.hpp
         void* Allocate(size_t size, size_t alignment) noexcept;
-        void  Free(void* p, size_t size) noexcept;
+
+        // Replacement for malloc()
+        void* Allocate(size_t size) noexcept
+        {
+            return (size <= kMaxBlockSize) ? (m_pAllocators + m_pBlockSizeLookup[size])->Allocate() 
+                : malloc(size);
+        }
+
+        // Replacement for free()
+        void  Free(void* p, size_t size) noexcept
+        {
+            (size <= kMaxBlockSize) ? (m_pAllocators + m_pBlockSizeLookup[size])->Free(p) 
+                : free(p);
+        }
     private:
+        static const uint32_t kBlockSizes[];
+
+        static const uint32_t kPageSize;
+        static const uint32_t kAlignment;
+
+        // number of elements in the block size array
+        static const uint32_t kNumBlockSizes;
+
+        // largest valid block size
+        static const uint32_t kMaxBlockSize;
+
         static size_t*        m_pBlockSizeLookup;
         static Allocator*     m_pAllocators;
     private:

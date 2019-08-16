@@ -1,20 +1,21 @@
 #pragma once
-#include "Image.hpp"
+#include "geommath.hpp"
 #include "IRuntimeModule.hpp"
-#include "Mesh.hpp"
+#include "SceneNode.hpp"
 
 namespace My {
-    class GraphicsManager : implements IRuntimeModule
+    class SceneManager : implements IRuntimeModule
     {
     public:
-        virtual ~GraphicsManager() {}
+        virtual ~SceneManager();
 
         virtual int Initialize();
         virtual void Finalize();
 
         virtual void Tick();
 
-        void DrawSingleMesh(const Mesh& mesh);
+    protected:
+        SceneEmptyNode m_RootNode;
     };
 }
 

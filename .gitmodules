@@ -1,12 +1,12 @@
-[submodule "libpng"]
-	path = External/src/libpng
-	url = git://git.code.sf.net/p/libpng/code
-[submodule "zlib"]
+[submodule "External/src/zlib"]
 	path = External/src/zlib
 	url = https://github.com/netwarm007/zlib.git
-[submodule "opengex"]
+[submodule "External/src/opengex"]
 	path = External/src/opengex
 	url = https://github.com/netwarm007/OpenGEX.git
-[submodule "crossguid"]
+[submodule "External/src/crossguid"]
 	path = External/src/crossguid
 	url = https://github.com/netwarm007/crossguid
+[submodule "External/src/libpng"]
+	path = External/src/libpng
+	url = git://git.code.sf.net/p/libpng/code
