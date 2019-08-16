@@ -1,6 +1,7 @@
+#pragma once
+
 #include "WindowsApplication.hpp"
 #include "D3d/D3d12GraphicsManager.hpp"
-#pragma once
 #include "MemoryManager.hpp"
 #include <tchar.h>
 

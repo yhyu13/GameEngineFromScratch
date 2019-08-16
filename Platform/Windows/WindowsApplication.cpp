@@ -64,7 +64,6 @@ LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
 
      // display the window on the screen
     ShowWindow(hWnd, SW_SHOWNORMAL);
-    UpdateWindow( hWnd );
     return result;
 }
 
@@ -156,7 +155,7 @@ LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPAR
 	    case WM_PAINT:
         // we will replace this part with Rendering Module
 	    {
-            OnDraw();
+            this->OnDraw();
 	    } 
         break;
 
@@ -170,15 +169,11 @@ LRESULT My::WindowsApplication::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPAR
             // store the window we created on Win32 side. Then retrive the window
             // pointer and make HandleMsg member function call in order to make calling
             // member function possible.
-            Kill();
+            this->Kill();
         } 
         break;
     }
 
     // Handle any messages the switch statement didn't
     return DefWindowProc (hWnd, msg, wParam, lParam);
-}
-
-void My::WindowsApplication::OnDraw()
-{
 }
