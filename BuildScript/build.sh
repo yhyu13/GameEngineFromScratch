@@ -1,6 +1,6 @@
 #!/bin/bash
-mkdir -p build
+mkdir build
 cd build
-cmake -G "Visual Studio 15 2017 Win64" ..
+cmake ..
 cmake --build . --config debug
-
+ctest -C Debug -V
