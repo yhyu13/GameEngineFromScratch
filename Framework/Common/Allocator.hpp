@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
+#include <mutex>
 
 namespace My {
 
@@ -68,6 +69,7 @@ namespace My {
                 uint32_t    m_nPages;
                 uint32_t    m_nBlocks;
                 uint32_t    m_nFreeBlocks;
+                std::mutex  mtx;
     };
 }
 

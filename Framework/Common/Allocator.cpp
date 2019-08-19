@@ -31,6 +31,9 @@ void My::Allocator::Reset(size_t data_size, size_t page_size, size_t alignment) 
 {
     FreeAll();
 
+    // Lock
+    mtx.lock();
+
     m_szDataSize = data_size;
     m_szPageSize = page_size + sizeof(PageHeader);
 
@@ -46,10 +49,16 @@ void My::Allocator::Reset(size_t data_size, size_t page_size, size_t alignment) 
     m_szAlignmentSize = m_szBlockSize - minimal_size;
 
     m_nBlocksPerPage = (m_szPageSize - sizeof(PageHeader)) / m_szBlockSize;
+
+    // Unlock
+    mtx.unlock();
 }
 
 void* My::Allocator::Allocate() noexcept
 {
+    // Lock
+    mtx.lock();
+
     if (!m_pFreeList) {
         // allocate a new page
         PageHeader* pNewPage = reinterpret_cast<PageHeader*>(new uint8_t[m_szPageSize]);
@@ -86,11 +95,16 @@ void* My::Allocator::Allocate() noexcept
     FillAllocatedBlock(freeBlock);
 #endif
 
+    // Unlock
+    mtx.unlock();
+    
     return reinterpret_cast<void*>(freeBlock);
 }
 
 void My::Allocator::Free(void* p) noexcept
 {
+    // Lock
+    mtx.lock();
 
     BlockHeader* block = reinterpret_cast<BlockHeader*>(p);
 
@@ -101,10 +115,16 @@ void My::Allocator::Free(void* p) noexcept
     block->pNext = m_pFreeList;
     m_pFreeList = block;
     ++m_nFreeBlocks;
+
+    // Unlock
+    mtx.unlock();
 }
 
 void My::Allocator::FreeAll() noexcept
 {
+    // Lock
+    mtx.lock();
+
     PageHeader* pPage = m_pPageList;
     while(pPage) {
         PageHeader* _p = pPage;
@@ -119,6 +139,9 @@ void My::Allocator::FreeAll() noexcept
     m_nPages        = 0;
     m_nBlocks       = 0;
     m_nFreeBlocks   = 0;
+
+    // Unlock
+    mtx.unlock();
 }
 
 #if defined(_DEBUG)

@@ -83,34 +83,39 @@ int main(int , char** )
     wcout << L"C++NativeMalloc Score (Vector4f): " << wStr(timer.Mark()) << endl;
 
     timer.Reset();
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < 100; i++)
     {
-        std::vector<int, My::allocator<int>> vec2;
-        vec2.push_back(1);
+        //std::vector<int, My::allocator<int>> vec2;
+        MyVector(int) vec2;
+        for (int j = 0; j < 1000; j++)
+            vec2.push_back(1);
     }
     wcout << L"MyMemoryManager Score (vec int): " << wStr(timer.Mark()) << endl;
 
     timer.Reset();
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < 100; i++)
     {
         std::vector<int> vec2;
-        vec2.push_back(1);
+        for (int j = 0; j < 1000; j++)
+            vec2.push_back(1);
     }
     wcout << L"C++NativeMalloc Score (vec int): " << wStr(timer.Mark()) << endl;
 
     timer.Reset();
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < 100; i++)
     {
-        std::vector<Vector4f, My::allocator<Vector4f>> vec2;
-        vec2.push_back(Vector4f());
+        MyVector(Vector4f) vec2;
+        for (int j = 0; j < 1000; j++)
+            vec2.push_back(Vector4f());
     }
     wcout << L"MyMemoryManager Score (vec Vector4f): " << wStr(timer.Mark()) << endl;
 
     timer.Reset();
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < 100; i++)
     {
         std::vector<Vector4f> vec2;
-        vec2.push_back(Vector4f());
+        for (int j = 0; j < 1000; j++)
+            vec2.push_back(Vector4f());
     }
     wcout << L"C++NativeMalloc Score (vec Vector4f): " << wStr(timer.Mark()) << endl;
 

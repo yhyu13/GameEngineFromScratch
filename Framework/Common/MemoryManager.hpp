@@ -66,6 +66,11 @@ namespace My {
 }
 
 namespace My {
+
+    #ifndef MyVector
+    #define MyVector(T) std::vector<T, My::allocator<T>>
+    #endif
+
     extern MemoryManager*   g_pMemoryManager;
 
     template <typename T>
