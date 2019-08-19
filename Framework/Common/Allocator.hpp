@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <mutex>
 
+#define T_SAFE 0
+
 namespace My {
 
     struct BlockHeader {
@@ -69,7 +71,10 @@ namespace My {
                 uint32_t    m_nPages;
                 uint32_t    m_nBlocks;
                 uint32_t    m_nFreeBlocks;
+
+#if T_SAFE
                 std::mutex  mtx;
+#endif
     };
 }
 

@@ -30,7 +30,6 @@ namespace My {
         virtual void Finalize() noexcept override;
         virtual void Tick() noexcept override;
 
-        // Called in Buffer.hpp
         void* Allocate(size_t size, size_t alignment) noexcept;
 
         // Replacement for malloc()
