@@ -31,7 +31,7 @@ void My::Allocator::Reset(size_t data_size, size_t page_size, size_t alignment) 
 {
     FreeAll();
 
-#if T_SAFE
+#if THREAD_SAFE
     // Lock
     mtx.lock();
 #endif
@@ -52,7 +52,7 @@ void My::Allocator::Reset(size_t data_size, size_t page_size, size_t alignment) 
 
     m_nBlocksPerPage = (m_szPageSize - sizeof(PageHeader)) / m_szBlockSize;
 
-#if T_SAFE
+#if THREAD_SAFE
     // Unlock
     mtx.unlock();
 #endif
@@ -61,7 +61,7 @@ void My::Allocator::Reset(size_t data_size, size_t page_size, size_t alignment) 
 void* My::Allocator::Allocate() noexcept
 {
 
-#if T_SAFE
+#if THREAD_SAFE
     // Lock
     mtx.lock();
 #endif
@@ -102,7 +102,7 @@ void* My::Allocator::Allocate() noexcept
     FillAllocatedBlock(freeBlock);
 #endif
 
-#if T_SAFE
+#if THREAD_SAFE
     // Unlock
     mtx.unlock();
 #endif
@@ -113,7 +113,7 @@ void* My::Allocator::Allocate() noexcept
 void My::Allocator::Free(void* p) noexcept
 {
 
-#if T_SAFE
+#if THREAD_SAFE
     // Lock
     mtx.lock();
 #endif
@@ -128,7 +128,7 @@ void My::Allocator::Free(void* p) noexcept
     m_pFreeList = block;
     ++m_nFreeBlocks;
 
-#if T_SAFE
+#if THREAD_SAFE
     // Unlock
     mtx.unlock();
 #endif
@@ -137,7 +137,7 @@ void My::Allocator::Free(void* p) noexcept
 void My::Allocator::FreeAll() noexcept
 {
 
-#if T_SAFE
+#if THREAD_SAFE
     // Lock
     mtx.lock();
 #endif
@@ -157,7 +157,7 @@ void My::Allocator::FreeAll() noexcept
     m_nBlocks       = 0;
     m_nFreeBlocks   = 0;
 
-#if T_SAFE
+#if THREAD_SAFE
     // Unlock
     mtx.unlock();
 #endif

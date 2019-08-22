@@ -1,4 +1,3 @@
-#include <assert.h>
 #include "MemoryManager.hpp"
 
 extern "C" void* malloc(size_t size);
