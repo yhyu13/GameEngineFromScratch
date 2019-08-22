@@ -45,3 +45,5 @@ build*/
 **/lib64
 .vscode/
 Document/html
+
+config.h

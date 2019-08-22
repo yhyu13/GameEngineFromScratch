@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <mutex>
 
-#define T_SAFE 0
+#define THREAD_SAFE 0
 
 namespace My {
 
@@ -68,11 +68,11 @@ namespace My {
                 size_t      m_nBlocksPerPage;
 
                 // statistics
-                uint32_t    m_nPages;
-                uint32_t    m_nBlocks;
-                uint32_t    m_nFreeBlocks;
+                size_t    m_nPages;
+                size_t    m_nBlocks;
+                size_t    m_nFreeBlocks;
 
-#if T_SAFE
+#if THREAD_SAFE
                 std::mutex  mtx;
 #endif
     };

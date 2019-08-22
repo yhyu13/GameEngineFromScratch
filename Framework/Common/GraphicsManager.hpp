@@ -1,7 +1,6 @@
 #pragma once
 #include "Image.hpp"
 #include "IRuntimeModule.hpp"
-#include "Mesh.hpp"
 
 namespace My {
     class GraphicsManager : implements IRuntimeModule
@@ -14,7 +13,10 @@ namespace My {
 
         virtual void Tick();
 
-        void DrawSingleMesh(const Mesh& mesh);
+        virtual void Clear();
+        virtual void Draw();
     };
+
+    extern GraphicsManager* g_pGraphicsManager;
 }
 

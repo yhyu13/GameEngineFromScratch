@@ -11,11 +11,12 @@ namespace My {
         OpenGLApplication(GfxConfiguration& config)
             : WindowsApplication(config) {};
 
-        virtual int Initialize() override;
-        virtual void Finalize() override;
-        virtual void Tick() override;
+        virtual int Initialize();
+        virtual void Finalize();
+        virtual void Tick();
 
-    protected:
+    private:
+        HDC   m_hDC;
         HGLRC m_RenderContext;
     };
 }
