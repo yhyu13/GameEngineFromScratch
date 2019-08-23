@@ -115,7 +115,7 @@ namespace My {
         operator const T*() const { return static_cast<const T*>(data); };
         Vector3Type& operator=(const T* f) 
         { 
-            for (int32_t i = 0; i < 4; i++)
+            for (int32_t i = 0; i < 3; i++)
             {
                 data[i] = *(f + i); 
             }
