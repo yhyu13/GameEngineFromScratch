@@ -27,7 +27,7 @@ endforeach(FUNC)
 IF(${WIN32})
 add_custom_command(OUTPUT ${GEOMMATH_LIB_FILE}
         COMMAND ${CMAKE_AR} ${ISPC_LIBRARIAN_OPTIONS} ${OBJECTS}
-        COMMAND rm -v ${OBJECTS}
+        # COMMAND rm -v ${OBJECTS}
         DEPENDS ${OBJECTS}
         )
 ELSE(${WIN32})
