@@ -3,8 +3,8 @@
 #include <iostream>
 #include <limits>
 #include <math.h>
+#include "include/Sum.h"
 #include "include/CrossProduct.h"
-#include "include/DotProduct.h"
 #include "include/MulByElement.h"
 #include "include/Normalize.h"
 #include "include/Transform.h"
@@ -113,6 +113,14 @@ namespace My {
 
         operator T*() { return data; };
         operator const T*() const { return static_cast<const T*>(data); };
+        Vector3Type& operator=(const T* f) 
+        { 
+            for (int32_t i = 0; i < 4; i++)
+            {
+                data[i] = *(f + i); 
+            }
+            return *this;
+        };
     };
 
     typedef Vector3Type<float> Vector3f;
@@ -142,7 +150,10 @@ namespace My {
         operator const T*() const { return static_cast<const T*>(data); };
         Vector4Type& operator=(const T* f) 
         { 
-            memcpy(data, f, sizeof(T) * 4); 
+            for (int32_t i = 0; i < 4; i++)
+            {
+                data[i] = *(f + i); 
+            }
             return *this;
         };
         
@@ -201,10 +212,22 @@ namespace My {
         ispc::CrossProduct(vec1, vec2, result);
     }
 
+    template <typename T>
+    inline void DotProduct(T& result, const T* a, const T* b, size_t count)
+    {
+        T* _result = new T[count];
+
+        result = static_cast<T>(0);
+        ispc::MulByElement(a, b, _result, count);
+        result = ispc::Sum(_result, count);
+
+        delete[] _result;
+    }
+
     template <template <typename> class TT, typename T>
     inline void DotProduct(T& result, const TT<T>& vec1, const TT<T>& vec2)
     {
-        ispc::DotProduct(vec1, vec2, &result, countof(vec1.data));
+        DotProduct(result, static_cast<const T*>(vec1), static_cast<const T*>(vec2), countof(vec1.data));
     }
 
     template <typename T>
@@ -236,11 +259,16 @@ namespace My {
 
         Matrix& operator=(const T* _data) 
         {
-            memcpy(data, _data, ROWS * COLS * sizeof(T));
+            for (int i = 0; i < ROWS; i++) {
+                for (int j = 0; j < COLS; j++) {
+                    data[i][j] = *(_data + i * COLS + j);
+                }
+            }
             return *this;
         }
     };
 
+    typedef Matrix<float, 3, 3> Matrix3X3f;
     typedef Matrix<float, 4, 4> Matrix4X4f;
 
     template <typename T, int ROWS, int COLS>
@@ -294,11 +322,12 @@ namespace My {
         Transpose(matrix2_transpose, matrix2);
         for (int i = 0; i < Da; i++) {
             for (int j = 0; j < Dc; j++) {
-                ispc::DotProduct(matrix1[i], matrix2_transpose[j], &result[i][j], Db);
+                DotProduct(result[i][j], matrix1[i], matrix2_transpose[j], Db);
+
             }
         }
 
-        return;
+        
     }
 
     template <typename T, int ROWS, int COLS>
@@ -316,10 +345,13 @@ namespace My {
         ispc::Transpose(matrix1, result, ROWS, COLS);
     }
 
-    template <typename T>
-    inline void Normalize(T& result)
+    template <template <typename> class TT, typename T>
+    inline void Normalize(TT<T>& a)
     {
-        ispc::Normalize(result, countof(result.data));
+        T length;
+        DotProduct(length, static_cast<T*>(a), static_cast<T*>(a), countof(a.data));
+        length = sqrt(length);
+        ispc::Normalize(a, length, countof(a.data));
     }
 
     inline void MatrixRotationYawPitchRoll(Matrix4X4f& matrix, const float yaw, const float pitch, const float roll)
@@ -346,19 +378,21 @@ namespace My {
 
         matrix = tmp;
 
-        return;
+        
     }
 
     inline void TransformCoord(Vector3f& vector, const Matrix4X4f& matrix)
     {
-        ispc::Transform(vector, matrix);
+        Vector4f temp = Vector4f(vector,1);
+        ispc::Transform(temp, matrix);
+        vector.x = temp.x / temp.w;
+        vector.y = temp.y / temp.w;
+        vector.z = temp.z / temp.w;
     }
 
     inline void Transform(Vector4f& vector, const Matrix4X4f& matrix)
     {
         ispc::Transform(vector, matrix);
-
-        return;
     }
 
     inline void BuildViewMatrix(Matrix4X4f& result, const Vector3f position, const Vector3f lookAt, const Vector3f up)
@@ -405,7 +439,7 @@ namespace My {
 
         matrix = identity;
 
-        return;
+        
     }
 
 
@@ -420,7 +454,7 @@ namespace My {
 
         matrix = perspective;
 
-        return;
+        
     }
 
 
@@ -435,7 +469,7 @@ namespace My {
 
         matrix = translation;
 
-        return;
+        
     }
 
     inline void MatrixRotationX(Matrix4X4f& matrix, const float angle)
@@ -451,7 +485,7 @@ namespace My {
 
         matrix = rotation;
 
-        return;
+        
     }
 
     inline void MatrixScale(Matrix4X4f& matrix, const float x, const float y, const float z)
@@ -465,7 +499,7 @@ namespace My {
 
         matrix = scale;
 
-        return;
+        
     }
 
     inline void MatrixRotationY(Matrix4X4f& matrix, const float angle)
@@ -481,7 +515,7 @@ namespace My {
 
         matrix = rotation;
 
-        return;
+        
     }
 
 
@@ -498,7 +532,7 @@ namespace My {
 
         matrix = rotation;
 
-        return;
+        
     }
 
     inline void MatrixRotationAxis(Matrix4X4f& matrix, const Vector3f& axis, const float angle)
@@ -520,7 +554,7 @@ namespace My {
         Matrix4X4f rotation = {{{
             {   1.0f - 2.0f * q.y * q.y - 2.0f * q.z * q.z,  2.0f * q.x * q.y + 2.0f * q.w * q.z,   2.0f * q.x * q.z - 2.0f * q.w * q.y,    0.0f    },
             {   2.0f * q.x * q.y - 2.0f * q.w * q.z,    1.0f - 2.0f * q.x * q.x - 2.0f * q.z * q.z, 2.0f * q.y * q.z + 2.0f * q.w * q.x,    0.0f    },
-            {   2.0f * q.x * q.z + 2.0f * q.w * q.y,    2.0f * q.y * q.z - 2.0f * q.y * q.z - 2.0f * q.w * q.x, 1.0f - 2.0f * q.x * q.x - 2.0f * q.y * q.y, 0.0f    },
+            {   2.0f * q.x * q.z + 2.0f * q.w * q.y,    2.0f * q.y * q.z - 2.0f * q.w * q.x, 1.0f - 2.0f * q.x * q.x - 2.0f * q.y * q.y, 0.0f    },
             {   0.0f,   0.0f,   0.0f,   1.0f    }
         }}};
 
