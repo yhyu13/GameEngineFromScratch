@@ -1,4 +1,12 @@
-#include "EmptyApplication.hpp"
+// Do not inlucde "EmptyApplication.hpp" in order to avoid allocation w/o free
+// as pointers below will be allocated in other applications.
+// Just copy over the included header files from "EmptyApplication.hpp"
+#include "IApplication.hpp"
+#include "BaseApplication.hpp"
+#include "GraphicsManager.hpp"
+#include "MemoryManager.hpp"
+#include "AssetLoader.hpp"
+#include "SceneManager.hpp"
 
 namespace My {
     GfxConfiguration config;

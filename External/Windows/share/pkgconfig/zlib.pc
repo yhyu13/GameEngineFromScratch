@@ -1,0 +1,13 @@
+prefix=D:/GitWorkZone-MY/GameEngineFromScratch/External
+exec_prefix=D:/GitWorkZone-MY/GameEngineFromScratch/External
+libdir=D:/GitWorkZone-MY/GameEngineFromScratch/External/Windows/lib
+sharedlibdir=D:/GitWorkZone-MY/GameEngineFromScratch/External/Windows/lib
+includedir=D:/GitWorkZone-MY/GameEngineFromScratch/External/Windows/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.11
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
