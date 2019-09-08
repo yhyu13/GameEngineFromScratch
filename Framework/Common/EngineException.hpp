@@ -9,9 +9,9 @@ namespace My
 		EngineException() = delete;
 		explicit EngineException( const wchar_t* file,unsigned int line,const std::wstring& note = L"" )
 			:
-			note( note ),
-			file( file ),
-			line( line )
+			file( file ), //_CRT_WIDE(__FILE__)
+			line( line ), //__LINE__,
+			note( note )  //L"Error!"
 		{}
 		const std::wstring& GetNote() const;
 		const std::wstring& GetFile() const;

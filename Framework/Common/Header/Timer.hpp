@@ -1,13 +1,16 @@
 #pragma once
 #include <chrono>
+#include "EngineException.hpp"
 
 using namespace std::chrono;
 
 class Timer
 {
 public:
-	Timer() noexcept
+	Timer()
 	{
+		if(std::chrono::steady_clock::is_steady == false)
+			throw My::EngineException(_CRT_WIDE(__FILE__),__LINE__,L"C++11 std::chrono::steady_clock::is_steady() returns FALSE.");
 		last = steady_clock::now();
 	}
 	~Timer() noexcept {};
@@ -16,11 +19,9 @@ public:
 	{
 		last = steady_clock::now();
 	}
-	float Mark() noexcept
+	double Mark() noexcept
 	{
-		const auto old = last;
-		last = steady_clock::now();
-		const duration<float> Time = last - old;
+		const duration<double> Time = steady_clock::now() - last;
 		return Time.count();
 	}
 private:

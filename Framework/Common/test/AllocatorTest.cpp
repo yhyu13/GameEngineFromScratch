@@ -24,7 +24,7 @@ int main(int , char** )
         int* a = g_pMemoryManager->New<int>(30);
         g_pMemoryManager->Delete(a);
     }
-    wcout << L"MyMemoryManager Score (int): " << wStr(timer.Mark()) << endl;
+    wcout << L"MyMemoryManager Score (int): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 10000; i++)
@@ -32,7 +32,7 @@ int main(int , char** )
         int* a = new int(30);
         delete a;
     }
-    wcout << L"C++NativeMalloc Score (int): " << wStr(timer.Mark()) << endl;
+    wcout << L"C++NativeMalloc Score (int): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 10000; i++)
@@ -40,7 +40,7 @@ int main(int , char** )
         char* space = (char*)g_pMemoryManager->Allocate(1024);
         g_pMemoryManager->Free(space, 1024);
     }
-    wcout << L"MyMemoryManager Score (1kb): " << wStr(timer.Mark()) << endl;
+    wcout << L"MyMemoryManager Score (1kb): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 10000; i++)
@@ -48,7 +48,7 @@ int main(int , char** )
         char* space = (char*)malloc(1024);
         free(space);
     }
-    wcout << L"C++NativeMalloc Score (1kb): " << wStr(timer.Mark()) << endl;
+    wcout << L"C++NativeMalloc Score (1kb): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 10000; i++)
@@ -56,7 +56,7 @@ int main(int , char** )
         char* space = (char*)g_pMemoryManager->Allocate(4096);
         g_pMemoryManager->Free(space, 4096);
     }
-    wcout << L"MyMemoryManager Score (4kb): " << wStr(timer.Mark()) << endl;
+    wcout << L"MyMemoryManager Score (4kb): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 10000; i++)
@@ -64,7 +64,7 @@ int main(int , char** )
         char* space = (char*)malloc(4096);
         free(space);
     }
-    wcout << L"C++NativeMalloc Score (4kb): " << wStr(timer.Mark()) << endl;
+    wcout << L"C++NativeMalloc Score (4kb): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 10000; i++)
@@ -72,7 +72,7 @@ int main(int , char** )
         Vector4f* vec = g_pMemoryManager->New<Vector4f>();
         g_pMemoryManager->Delete(vec);
     }
-    wcout << L"MyMemoryManager Score (Vector4f): " << wStr(timer.Mark()) << endl;
+    wcout << L"MyMemoryManager Score (Vector4f): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 10000; i++)
@@ -80,7 +80,7 @@ int main(int , char** )
         Vector4f* vec = new Vector4f();
         delete vec;
     }
-    wcout << L"C++NativeMalloc Score (Vector4f): " << wStr(timer.Mark()) << endl;
+    wcout << L"C++NativeMalloc Score (Vector4f): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 100; i++)
@@ -90,7 +90,7 @@ int main(int , char** )
         for (int j = 0; j < 1000; j++)
             vec2.push_back(1);
     }
-    wcout << L"MyMemoryManager Score (vec int): " << wStr(timer.Mark()) << endl;
+    wcout << L"MyMemoryManager Score (vec int): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 100; i++)
@@ -99,7 +99,7 @@ int main(int , char** )
         for (int j = 0; j < 1000; j++)
             vec2.push_back(1);
     }
-    wcout << L"C++NativeMalloc Score (vec int): " << wStr(timer.Mark()) << endl;
+    wcout << L"C++NativeMalloc Score (vec int): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 100; i++)
@@ -108,7 +108,7 @@ int main(int , char** )
         for (int j = 0; j < 1000; j++)
             vec2.push_back(Vector4f());
     }
-    wcout << L"MyMemoryManager Score (vec Vector4f): " << wStr(timer.Mark()) << endl;
+    wcout << L"MyMemoryManager Score (vec Vector4f): " << wStr(timer.Mark()) << L"s" << endl;
 
     timer.Reset();
     for (int i = 0; i < 100; i++)
@@ -117,7 +117,7 @@ int main(int , char** )
         for (int j = 0; j < 1000; j++)
             vec2.push_back(Vector4f());
     }
-    wcout << L"C++NativeMalloc Score (vec Vector4f): " << wStr(timer.Mark()) << endl;
+    wcout << L"C++NativeMalloc Score (vec Vector4f): " << wStr(timer.Mark()) << L"s" << endl;
 
     char* space1 = (char*)g_pMemoryManager->Allocate(11);
     char* temp = space1;

@@ -15,6 +15,10 @@ namespace My {
         virtual void Finalize();
         virtual void Tick();
 
+    protected:
+        virtual void OnDraw() override;
+        virtual LRESULT HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam ) override;
+
     private:
         HDC   m_hDC;
         HGLRC m_RenderContext;

@@ -25,7 +25,7 @@ LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
     hInst = GetModuleHandle(NULL);
 
     // register window class                       // MyWindowProc // _HandleMsgSetup
-	WNDCLASSEX wc = { sizeof( WNDCLASSEX ),CS_CLASSDC,_HandleMsgSetup,0,0,
+	WNDCLASSEX wc = { sizeof( WNDCLASSEX ),CS_OWNDC,_HandleMsgSetup,0,0,
 		hInst,nullptr,nullptr,nullptr,nullptr,
 		wndClassName,nullptr };
 
@@ -86,6 +86,7 @@ LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
          // send the message to the WindowProc function
         DispatchMessage(&msg); 
     }
+    My::BaseApplication::OutputDebugFPS();
 }
 
 bool My::WindowsApplication::IsActive() const

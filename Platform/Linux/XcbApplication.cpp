@@ -100,6 +100,7 @@ void My::XcbApplication::Tick()
             break;
     }
     free(pEvent);
+    My::BaseApplication::OutputDebugFPS();
 }
 
 
