@@ -86,7 +86,10 @@ LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
          // send the message to the WindowProc function
         DispatchMessage(&msg); 
     }
-    My::BaseApplication::OutputDebugFPS();
+    if (m_drawScheduler.Available())
+    {
+        m_drawScheduler.FireAsync([this]{OutputDebugFPS();return 0;});
+    }
 }
 
 bool My::WindowsApplication::IsActive() const

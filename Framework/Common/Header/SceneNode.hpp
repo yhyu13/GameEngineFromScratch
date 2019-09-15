@@ -20,7 +20,7 @@ namespace My {
             BaseSceneNode() {};
             BaseSceneNode(const char* name) { m_strName = name; };
             BaseSceneNode(const std::string& name) { m_strName = name; };
-            BaseSceneNode(const std::string&& name) { m_strName = std::move(name); };
+            BaseSceneNode(std::string&& name) { m_strName = std::move(name); };
 			virtual ~BaseSceneNode() {};
 
             void AppendChild(std::unique_ptr<BaseSceneNode>&& sub_node)
@@ -57,6 +57,7 @@ namespace My {
             return out;
         }
     };
+    typedef BaseSceneNode SceneEmptyNode;
 
     template <typename T>
     class SceneNode : public BaseSceneNode {
@@ -74,14 +75,13 @@ namespace My {
             using BaseSceneNode::BaseSceneNode;
             SceneNode() = default;
             SceneNode(const std::shared_ptr<T>& object) { m_pSceneObject = object; };
-            SceneNode(const std::shared_ptr<T>&& object) { m_pSceneObject = std::move(object); };
+            SceneNode(std::shared_ptr<T>&& object) { m_pSceneObject = std::move(object); };
 
             void AddSceneObjectRef(const std::shared_ptr<T>& object) { m_pSceneObject = object; };
-            void AddSceneObjectRef(const std::shared_ptr<T>&& object) { m_pSceneObject = std::move(object); };
+            void AddSceneObjectRef(std::shared_ptr<T>&& object) { m_pSceneObject = std::move(object); };
 
     };
 
-    typedef BaseSceneNode SceneEmptyNode;
     class SceneGeometryNode : public SceneNode<SceneObjectGeometry> 
     {
         protected:
@@ -114,6 +114,7 @@ namespace My {
             const bool MotionBlur() { return m_bMotionBlur; };
             using SceneNode::AddSceneObjectRef;
             void AddSceneObjectRef(const std::shared_ptr<SceneObjectMaterial>& object) { m_Materials.push_back(object); };
+            void AddSceneObjectRef(std::shared_ptr<SceneObjectMaterial>&& object) { m_Materials.push_back(std::move(object)); };
     };
 
     class SceneLightNode : public SceneNode<SceneObjectLight> 

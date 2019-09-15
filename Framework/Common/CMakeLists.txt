@@ -1,5 +1,6 @@
 add_library(Common
 EngineException.cpp
+Scheduler.cpp
 Allocator.cpp
 AssetLoader.cpp
 BaseApplication.cpp

@@ -4,6 +4,9 @@
 using namespace My;
 
 bool My::BaseApplication::m_bQuit = false;
+int My::BaseApplication::m_nbFrames = 0;
+Scheduler My::BaseApplication::m_drawScheduler((int)60);
+Timer My::BaseApplication::m_timer;
 
 My::BaseApplication::BaseApplication(GfxConfiguration& cfg)
     :m_Config(cfg)
@@ -39,3 +42,16 @@ void My::BaseApplication::ShowMessage(const std::wstring& title,const std::wstri
     std::wcerr << title.c_str() << std::endl;
     std::wcerr << message.c_str() << std::endl;
 }
+
+void My::BaseApplication::OutputDebugFPS()
+{
+    m_nbFrames++;
+    if (m_timer.Mark() >= 1.0)
+    {
+        std::wcout << wStr(1000.0/m_nbFrames) + L" ms/frame" << std::endl;
+        m_nbFrames = 0;
+        m_timer.Reset();
+    }
+}
+
+            

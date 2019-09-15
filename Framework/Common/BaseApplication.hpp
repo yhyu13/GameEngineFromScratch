@@ -3,6 +3,7 @@
 #include "EngineException.hpp"
 #include "Utility.hpp"
 #include "Timer.hpp"
+#include "Scheduler.hpp"
 
 namespace My {
     class BaseApplication : implements IApplication
@@ -26,23 +27,16 @@ namespace My {
     protected:
         virtual void OnDraw() {};
 
-        void OutputDebugFPS()
-        {
-            static int nbFrames = 0;
-            nbFrames++;
-            if (timer.Mark() >= 1.0)
-            {
-                std::wcout << wStr(1000.0/nbFrames) + L" ms/frame" << std::endl;
-                nbFrames = 0;
-                timer.Reset();
-            }
-        }
+        static void OutputDebugFPS();
 
     protected:
         // Flag if need quit the main loop of the application
         static bool m_bQuit;
+        static int m_nbFrames;
+        static Scheduler m_drawScheduler;
         GfxConfiguration m_Config;
-        Timer timer;
+    private:
+        static Timer m_timer;
     };
 }
 

@@ -85,16 +85,32 @@ void My::OpenGLApplication::Finalize()
 
 void My::OpenGLApplication::Tick()
 {
-    WindowsApplication::Tick();
-    this->OnDraw();
+    // this struct holds Windows event messages
+    MSG msg;
+    // we use PeekMessage instead of GetMessage here
+    // because we should not block the thread at anywhere
+    // except the engine execution driver module 
+    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+        // translate keystroke messages into the right format
+        TranslateMessage(&msg);
+         // send the message to the WindowProc function
+        DispatchMessage(&msg); 
+    }
+    if (m_drawScheduler.Available())
+    {
+        // OpenGL uses Device Context(DC) for rendering,swapping buffers, etc. 
+        // DC is only avaiable to the thread that creates it. 
+        // Since we've created it in the main thread,
+        // calling Fire() instead of FireAsync() is the only valid option for OnDraw().
+        m_drawScheduler.Fire([this]{this->OnDraw();return 0;});
+        OutputDebugFPS();
+    }
 }
 
 void My::OpenGLApplication::OnDraw()
 {
     g_pGraphicsManager->Clear();
     g_pGraphicsManager->Draw();
-    
-    // Present the back buffer to the screen since rendering is complete.
     // Opengl automatically manages v-sync as along as wglSwapIntervalEXT(1)
     SwapBuffers(m_hDC);
 }
