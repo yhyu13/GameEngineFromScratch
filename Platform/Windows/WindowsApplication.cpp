@@ -86,6 +86,7 @@ void My::WindowsApplication::Tick()
          // send the message to the WindowProc function
         DispatchMessage(&msg); 
     }
+    this->OnDraw();
 }
 
 void My::WindowsApplication::OnDraw()

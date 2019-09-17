@@ -20,6 +20,7 @@ int initiate( Function&& f, Args&&... args )
     }
     catch( const EngineException& e )
 	{
+        BaseApplication::SetQuit(true);
 		const std::wstring eMsg = e.GetFullMessage() +
 			L"\n\nException caught at main window creation.";
         std::wcerr << e.GetExceptionType().c_str() << std::endl;
@@ -27,6 +28,7 @@ int initiate( Function&& f, Args&&... args )
 	}
 	catch( const std::exception& e )
 	{
+        BaseApplication::SetQuit(true);
 		// need to convert std::exception what() string from narrow to wide string
 		const std::string whatStr( e.what() );
 		const std::wstring eMsg = std::wstring( whatStr.begin(),whatStr.end() ) +
@@ -34,11 +36,12 @@ int initiate( Function&& f, Args&&... args )
         std::wcerr << "Unhandled STL Exception" << std::endl;
         std::wcerr << eMsg.c_str() << std::endl;
 	}
-	catch( ... )
-	{
-        std::wcerr << L"Unhandled Non-STL Exception" << std::endl;
-        std::wcerr << L"Exception caught at main window creation." << std::endl;
-	}
+	// catch( ... )
+	// {
+    //     BaseApplication::SetQuit(true);
+    //     std::wcerr << L"Unhandled Non-STL Exception" << std::endl;
+    //     std::wcerr << L"Exception caught at main window creation." << std::endl;
+	// }
     return 0;
 }
 
@@ -57,6 +60,7 @@ int FixedUpdate(double waitTime, Function&& f, Args&&... args )
     }
     catch(const EngineException & e)
     {
+        BaseApplication::SetQuit(true);
         const std::wstring eMsg = e.GetFullMessage() + 
             L"\n\nException caught at Windows message loop.";
         BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp);
@@ -64,6 +68,7 @@ int FixedUpdate(double waitTime, Function&& f, Args&&... args )
     }
     catch(const std::exception& e)
     {
+        BaseApplication::SetQuit(true);
         // need to convert std::exception what() string from narrow to wide string
         const std::string whatStr( e.what() );
         const std::wstring eMsg = std::wstring( whatStr.begin(),whatStr.end() ) + 
@@ -71,12 +76,12 @@ int FixedUpdate(double waitTime, Function&& f, Args&&... args )
         BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp);
         base->ShowMessage( L"Unhandled STL Exception",eMsg );
     }
-    catch( ... )
-    {
-        BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp);
-        base->ShowMessage( L"Unhandled Non-STL Exception",L"Exception caught at Windows message loop." );
-    }
-    BaseApplication::SetQuit(true);
+    // catch( ... )
+    // {
+    //     BaseApplication::SetQuit(true);
+    //     BaseApplication* base = dynamic_cast<BaseApplication*>(g_pApp);
+    //     base->ShowMessage( L"Unhandled Non-STL Exception",L"Exception caught at Windows message loop." );
+    // }
     return 0;
 }
 
@@ -123,10 +128,14 @@ int main() {
     }
     );
 
+    /* Both g_pApp Tick() (i.e., Input message loop) 
+     * and OnDraw() (i.e., Rendering loop),
+     * which is likely to be included in Tick() after the input message loop,
+     * need to iterate in the thread that creates them (for a windows application in particular).
+    */
     FixedUpdate(1.0/60.0, 
         [] {
             g_pApp->Tick();
-            g_pApp->OnDraw();
             }
     );
     
