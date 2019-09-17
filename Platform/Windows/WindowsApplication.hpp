@@ -29,6 +29,7 @@ namespace My {
 		virtual void Finalize() override;
 		// One cycle of the main loop
 		virtual void Tick() override;
+        virtual void OnDraw() override;
         virtual void ShowMessage( const std::wstring& title,const std::wstring& message ) const override;
     
     public:

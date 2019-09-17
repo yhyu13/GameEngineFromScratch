@@ -73,7 +73,7 @@ LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
 	UnregisterClass( wndClassName,hInst );
 }
 
- void My::WindowsApplication::Tick()
+void My::WindowsApplication::Tick()
 {
     // this struct holds Windows event messages
     MSG msg;
@@ -86,10 +86,11 @@ LPCWSTR My::WindowsApplication::wndClassName = L"GameEngineFromScratch";
          // send the message to the WindowProc function
         DispatchMessage(&msg); 
     }
-    if (m_drawScheduler.Available())
-    {
-        m_drawScheduler.FireAsync([this]{OutputDebugFPS();return 0;});
-    }
+}
+
+void My::WindowsApplication::OnDraw()
+{
+    OutputDebugFPS();
 }
 
 bool My::WindowsApplication::IsActive() const

@@ -66,6 +66,7 @@ int My::TestApplication::Initialize()
 
 void My::TestApplication::OnDraw()
 {
+    My::WindowsApplication::OnDraw();
     dynamic_cast<TestGraphicsManager*>(g_pGraphicsManager)->DrawBitmap(m_Image, 0);
     dynamic_cast<TestGraphicsManager*>(g_pGraphicsManager)->DrawBitmap(m_Image, 1);
 }

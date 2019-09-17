@@ -5,7 +5,6 @@ using namespace My;
 
 bool My::BaseApplication::m_bQuit = false;
 int My::BaseApplication::m_nbFrames = 0;
-Scheduler My::BaseApplication::m_drawScheduler((int)60);
 Timer My::BaseApplication::m_timer;
 
 My::BaseApplication::BaseApplication(GfxConfiguration& cfg)
@@ -32,6 +31,11 @@ void My::BaseApplication::Tick()
     throw 42;
 }
 
+void My::BaseApplication::OnDraw()
+{
+    throw 42;
+}
+
 bool My::BaseApplication::IsQuit()
 {
 	return m_bQuit;
@@ -43,6 +47,13 @@ void My::BaseApplication::ShowMessage(const std::wstring& title,const std::wstri
     std::wcerr << message.c_str() << std::endl;
 }
 
+// Static function
+void My::BaseApplication::SetQuit(bool quit)
+{
+    m_bQuit = quit;
+}
+
+// Static function
 void My::BaseApplication::OutputDebugFPS()
 {
     m_nbFrames++;

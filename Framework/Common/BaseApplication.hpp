@@ -18,6 +18,7 @@ namespace My {
         virtual void Finalize();
         // One cycle of the main loop
         virtual void Tick();
+        virtual void OnDraw();
 
         virtual bool IsQuit();
 
@@ -25,18 +26,17 @@ namespace My {
         virtual void ShowMessage( const std::wstring& title,const std::wstring& message ) const;
 
     protected:
-        virtual void OnDraw() {};
-
         static void OutputDebugFPS();
 
+    private:
+        static Timer m_timer;
     protected:
         // Flag if need quit the main loop of the application
         static bool m_bQuit;
         static int m_nbFrames;
-        static Scheduler m_drawScheduler;
         GfxConfiguration m_Config;
-    private:
-        static Timer m_timer;
+    public:
+        static void SetQuit(bool quit);
     };
 }
 
