@@ -10,7 +10,7 @@
 using namespace My;
 
 namespace My {
-    GfxConfiguration config(8, 8, 8, 8, 32, 0, 0, 960, 540, L"Game Engine From Scratch (Windows-OpenGL)");
+    GfxConfiguration config(8, 8, 8, 8, 32, 0, 0, 1280, 720, L"Game Engine From Scratch (Windows-OpenGL)");
 	IApplication* g_pApp                = static_cast<IApplication*>(new OpenGLApplication(config));
     GraphicsManager* g_pGraphicsManager = static_cast<GraphicsManager*>(new OpenGLGraphicsManager);
     MemoryManager*   g_pMemoryManager   = static_cast<MemoryManager*>(new MemoryManager);

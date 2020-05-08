@@ -348,10 +348,9 @@ namespace My {
     template <template <typename> class TT, typename T>
     inline void Normalize(TT<T>& a)
     {
-        T length;
-        DotProduct(length, static_cast<T*>(a), static_cast<T*>(a), countof(a.data));
-        length = sqrt(length);
-        ispc::Normalize(a, length, countof(a.data));
+        T sqlength;
+        DotProduct(sqlength, static_cast<T*>(a), static_cast<T*>(a), countof(a.data));
+        ispc::Normalize(a, sqlength, countof(a.data));
     }
 
     inline void MatrixRotationYawPitchRoll(Matrix4X4f& matrix, const float yaw, const float pitch, const float roll)

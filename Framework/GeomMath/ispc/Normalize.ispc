@@ -1,7 +1,7 @@
-export void Normalize(uniform float v[], uniform float length, const uniform size_t count)
+export void Normalize(uniform float v[], uniform float sqlength, const uniform size_t count)
 {
-    length = 1.0f / length;
+    sqlength = rsqrt(sqlength);
     foreach (index = 0 ... count) {
-        v[index] *= length;
+        v[index] *= sqlength;
     }
 }
